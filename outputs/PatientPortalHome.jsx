@@ -147,9 +147,9 @@ const updates = [
 
 const quickActions = [
   { icon: CalendarIcon,  label: "Book appointment",  color: colors.primary, bg: colors.skyTint,   route: "book-appointment" },
-  { icon: MessageIcon,   label: "Message care team", color: colors.primary, bg: colors.skyTint,   route: "messages" },
   { icon: ClipboardIcon, label: "View results",      color: colors.purple,  bg: colors.purpleBg,  route: "test-results" },
   { icon: PillIcon,      label: "Renew prescription",color: colors.warning, bg: colors.warningBg, route: null },
+  { icon: MessageIcon,   label: "Message care team", color: colors.success, bg: colors.successBg, route: "messages" },
 ];
 
 const navItems = [
