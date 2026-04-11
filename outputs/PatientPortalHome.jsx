@@ -83,6 +83,8 @@ const colors = {
   errorBg:      "#FEF2F0",
   purple:       "#7C6FD8",
   purpleBg:     "#F3F1FE",
+  orange:       "#F97316",
+  orangeBg:     "#FFF7ED",
 };
 
 /*
@@ -148,7 +150,7 @@ const updates = [
 
 
 const navItems = [
-  { icon: HomeIcon,      label: "Home",            id: "home",         active: true,  color: colors.primary, bg: colors.skyTint   },
+  { icon: HomeIcon,      label: "Home",            id: "home",         active: true,  color: colors.orange,  bg: colors.orangeBg  },
   { icon: CalendarIcon,  label: "Appointments",    id: "appointments", active: false, color: colors.primary, bg: colors.skyTint   },
   { icon: ClipboardIcon, label: "Test Results",    id: "results",      active: false, color: colors.purple,  bg: colors.purpleBg  },
   { icon: PillIcon,      label: "Request Refills", id: "refills",      active: false, color: colors.warning, bg: colors.warningBg },
@@ -244,9 +246,9 @@ function DesktopNav({ onNavigate }) {
             className="relative flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2"
             style={{
               color: colors.textDark,
-              background: surfaceStyle.background,
-              border: isActive ? `1px solid ${item.color}30` : surfaceStyle.border,
-              boxShadow: isActive ? `0 2px 8px ${item.color}20, ${surfaceStyle.boxShadow}` : surfaceStyle.boxShadow,
+              background: isActive ? `${item.color}15` : glass.background,
+              border: isActive ? `1px solid ${item.color}35` : glass.border,
+              boxShadow: isActive ? `inset 0 2px 4px ${item.color}12, inset 0 0 0 0.5px rgba(255,255,255,0.4), 0 0.5px 0 rgba(255,255,255,0.5)` : glass.boxShadow,
               backdropFilter: glass.backdropFilter,
               WebkitBackdropFilter: glass.WebkitBackdropFilter,
             }}
@@ -317,12 +319,12 @@ function MobileNav({ onNavigate }) {
             aria-current={isActive ? "page" : undefined}
             onClick={navRoutes[item.id] ? (e) => { e.preventDefault(); onNavigate(navRoutes[item.id]); } : undefined}
             className="relative flex flex-col items-center justify-center gap-0.5 py-2.5 px-2 flex-1 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset"
-            style={{ color: isActive ? colors.primary : colors.textMuted, minHeight: 56 }}
+            style={{ color: isActive ? item.color : colors.textMuted, minHeight: 56 }}
           >
             {isActive && (
               <span
                 className="absolute top-0 left-1/2 -translate-x-1/2 rounded-b-full"
-                style={{ width: 24, height: 3, background: colors.primary }}
+                style={{ width: 24, height: 3, background: item.color }}
                 aria-hidden="true"
               />
             )}
