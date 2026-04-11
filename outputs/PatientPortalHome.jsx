@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Search, X, ChevronRight, Video, Send } from "lucide-react";
+import mariaAvatar from "../assets/maria_avatar.png";
 
 /* ─────────────────────────────────────────────
    BACKGROUND ANIMATION
@@ -145,19 +146,13 @@ const updates = [
   { id: "refill",  icon: PillIcon,      accent: colors.warning, accentBg: colors.warningBg, label: "Refill reminder",      title: "Your prescription is ready to renew",  detail: "Lisinopril 10 mg · Refill by April 12", action: "Renew prescription", tag: null },
 ];
 
-const quickActions = [
-  { icon: CalendarIcon,  label: "Book appointment",  color: colors.primary, bg: colors.skyTint,   route: "book-appointment" },
-  { icon: ClipboardIcon, label: "View results",      color: colors.purple,  bg: colors.purpleBg,  route: "test-results" },
-  { icon: PillIcon,      label: "Renew prescription",color: colors.warning, bg: colors.warningBg, route: null },
-  { icon: MessageIcon,   label: "Message care team", color: colors.success, bg: colors.successBg, route: "messages" },
-];
 
 const navItems = [
-  { icon: HomeIcon,      label: "Home",            id: "home",         active: true  },
-  { icon: CalendarIcon,  label: "Appointments",    id: "appointments", active: false },
-  { icon: ClipboardIcon, label: "Test Results",    id: "results",      active: false },
-  { icon: PillIcon,      label: "Request Refills", id: "refills",      active: false },
-  { icon: MessageIcon,   label: "Messages",        id: "messages",     active: false, badge: 1 },
+  { icon: HomeIcon,      label: "Home",            id: "home",         active: true,  color: colors.primary, bg: colors.skyTint   },
+  { icon: CalendarIcon,  label: "Appointments",    id: "appointments", active: false, color: colors.primary, bg: colors.skyTint   },
+  { icon: ClipboardIcon, label: "Test Results",    id: "results",      active: false, color: colors.purple,  bg: colors.purpleBg  },
+  { icon: PillIcon,      label: "Request Refills", id: "refills",      active: false, color: colors.warning, bg: colors.warningBg },
+  { icon: MessageIcon,   label: "Messages",        id: "messages",     active: false, color: colors.success, bg: colors.successBg, badge: 1 },
 ];
 
 /* ─────────────────────────────────────────────
@@ -216,14 +211,12 @@ function SearchBar() {
 /* ── Patient avatar ── */
 function Avatar({ size = 40 }) {
   return (
-    <div
-      className="rounded-full flex items-center justify-center font-semibold text-white flex-shrink-0"
-      style={{ width: size, height: size, background: `linear-gradient(135deg, ${colors.primary}, #5BB8FF)`, fontSize: size * 0.36 }}
-      aria-label="Maria's profile photo"
-      role="img"
-    >
-      MV
-    </div>
+    <img
+      src={mariaAvatar}
+      alt="Maria's profile photo"
+      className="rounded-full object-cover flex-shrink-0"
+      style={{ width: size, height: size, border: "2px solid rgba(255,255,255,0.8)", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}
+    />
   );
 }
 
@@ -248,12 +241,12 @@ function DesktopNav({ onNavigate }) {
             href={`#${item.id}`}
             aria-current={isActive ? "page" : undefined}
             onClick={navRoutes[item.id] ? (e) => { e.preventDefault(); onNavigate(navRoutes[item.id]); } : undefined}
-            className="relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2"
+            className="relative flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2"
             style={{
-              color: isActive ? colors.primary : colors.textMuted,
+              color: colors.textDark,
               background: surfaceStyle.background,
-              border: surfaceStyle.border,
-              boxShadow: surfaceStyle.boxShadow,
+              border: isActive ? `1px solid ${item.color}30` : surfaceStyle.border,
+              boxShadow: isActive ? `0 2px 8px ${item.color}20, ${surfaceStyle.boxShadow}` : surfaceStyle.boxShadow,
               backdropFilter: glass.backdropFilter,
               WebkitBackdropFilter: glass.WebkitBackdropFilter,
             }}
@@ -261,24 +254,26 @@ function DesktopNav({ onNavigate }) {
               if (!isActive) {
                 e.currentTarget.style.background = glassHover.background;
                 e.currentTarget.style.boxShadow  = glassHover.boxShadow;
+                e.currentTarget.style.border      = `1px solid rgba(255,255,255,0.95)`;
               }
             }}
             onMouseLeave={(e) => {
               if (!isActive) {
                 e.currentTarget.style.background = glass.background;
                 e.currentTarget.style.boxShadow  = glass.boxShadow;
+                e.currentTarget.style.border      = glass.border;
               }
             }}
           >
             <span
-              className="flex items-center justify-center rounded-lg flex-shrink-0"
+              className="flex items-center justify-center rounded-xl flex-shrink-0"
               style={{
-                width: 30, height: 30,
-                background: isActive ? `rgba(42,157,255,0.15)` : "rgba(255,255,255,0.5)",
-                color: isActive ? colors.primary : colors.textMuted,
+                width: 40, height: 40,
+                background: item.bg,
+                color: item.color,
               }}
             >
-              <IconComp size={17} />
+              <IconComp size={20} />
             </span>
             <span>{item.label}</span>
             {item.badge && (
@@ -368,49 +363,6 @@ function WelcomeHeader() {
   );
 }
 
-/* ── Quick actions grid (glass cards) ── */
-function QuickActions({ onNavigate }) {
-  return (
-    <section aria-label="Quick actions">
-      <h2 className="sr-only">Quick actions</h2>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {quickActions.map((qa) => {
-          const IconComp = qa.icon;
-          return (
-            <button
-              key={qa.label}
-              onClick={() => qa.route && onNavigate(qa.route)}
-              className="group flex flex-col items-center justify-center gap-2.5 rounded-2xl py-5 px-3 transition-all duration-200 focus:outline-none focus-visible:ring-2"
-              style={{
-                ...glass,
-                color: colors.textDark,
-                cursor: qa.route ? "pointer" : "default",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = glassHover.background;
-                e.currentTarget.style.boxShadow  = glassHover.boxShadow;
-                e.currentTarget.style.border      = `1px solid rgba(255,255,255,0.95)`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = glass.background;
-                e.currentTarget.style.boxShadow  = glass.boxShadow;
-                e.currentTarget.style.border      = glass.border;
-              }}
-            >
-              <span
-                className="flex items-center justify-center rounded-xl"
-                style={{ width: 44, height: 44, background: qa.bg, color: qa.color }}
-              >
-                <IconComp size={22} />
-              </span>
-              <span className="text-sm font-medium text-center leading-tight">{qa.label}</span>
-            </button>
-          );
-        })}
-      </div>
-    </section>
-  );
-}
 
 /* ── Pill-style action button (glass) ── */
 function PillButton({ href, color, children }) {
@@ -810,7 +762,6 @@ export default function PatientPortalHome({ onNavigate = () => {} }) {
               </a>
             </div>
 
-            <QuickActions onNavigate={onNavigate} />
             <LatestUpdates />
 
           </div>
