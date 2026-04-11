@@ -235,7 +235,6 @@ function DesktopNav({ onNavigate }) {
       {navItems.map((item) => {
         const IconComp = item.icon;
         const isActive = item.active;
-        const surfaceStyle = isActive ? glassActive : glass;
 
         return (
           <a
@@ -246,9 +245,9 @@ function DesktopNav({ onNavigate }) {
             className="relative flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2"
             style={{
               color: colors.textDark,
-              background: isActive ? `${item.color}15` : glass.background,
+              background: glass.background,
               border: isActive ? `1px solid ${item.color}35` : glass.border,
-              boxShadow: isActive ? `inset 0 2px 4px ${item.color}12, inset 0 0 0 0.5px rgba(255,255,255,0.4), 0 0.5px 0 rgba(255,255,255,0.5)` : glass.boxShadow,
+              boxShadow: isActive ? `0 2px 8px ${item.color}20, ${glass.boxShadow}` : glass.boxShadow,
               backdropFilter: glass.backdropFilter,
               WebkitBackdropFilter: glass.WebkitBackdropFilter,
             }}
