@@ -867,25 +867,41 @@ function BookingStepsCarousel3D({
   const PERSP      = isMobile ? 1400 : 2200;
   const stageScale = PERSP / (PERSP - RADIUS);
   const CARD_W     = isMobile ? (windowWidth - 40) / stageScale : 430;
-  const CARD_H     = isMobile ? 736 / stageScale : 680;
+  
   const nItems     = stepFlow.length;
   const ANGLE      = 360 / nItems;
+  const activeIndex = stepFlow.indexOf(currentStep);
+
+  const cardRefs = useRef([]);
+  const [activeCardHeight, setActiveCardHeight] = useState(680);
+
   // Stage height sized so the perspective-projected card bottom lands exactly
   // at the stage boundary on both mobile and desktop — no blank CSS gap below
   // the visual card edge before the step dots.
-  const STAGE_H    = Math.round(2 * stageScale * (140 + CARD_H) / (1 + stageScale));
-
-  const activeIndex = stepFlow.indexOf(currentStep);
+  const STAGE_H    = Math.round(2 * stageScale * (140 + activeCardHeight) / (1 + stageScale));
 
   // Track the rotation as a running accumulator so transitions always go the
   // short way round and we never "wrap" through 360°.
-  // When nItems changes (e.g. video vs in-person removes/adds the location step),
-  // ANGLE changes too — the old accumulated value is no longer valid so we
-  // hard-reset to the correct absolute angle for the current index.
+  // When nItems changes (e.g. video vs in-person), ANGLE changes too
   const rotRef = useRef(-activeIndex * ANGLE);
   const [rotation, setRotation] = useState(rotRef.current);
   const prevIdxRef    = useRef(activeIndex);
   const prevNItemsRef = useRef(nItems);
+
+  useEffect(() => {
+    const el = cardRefs.current[activeIndex];
+    if (!el) return;
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        if (entry.contentRect.height > 0) {
+          setActiveCardHeight(entry.contentRect.height);
+        }
+      }
+    });
+    observer.observe(el);
+    setActiveCardHeight(el.offsetHeight);
+    return () => observer.disconnect();
+  }, [activeIndex, windowWidth]);
 
   useEffect(() => {
     const flowChanged = prevNItemsRef.current !== nItems;
@@ -944,12 +960,12 @@ function BookingStepsCarousel3D({
         position: "relative",
       }}>
         <div style={{
-          height: CARD_H,
+          height: activeCardHeight,
           marginTop: 140,
           position: "relative",
           transformStyle: "preserve-3d",
           transform: `rotateY(${rotation}deg)`,
-          transition: "transform 0.65s cubic-bezier(0.4, 0, 0.2, 1)",
+          transition: "transform 0.65s cubic-bezier(0.4, 0, 0.2, 1), height 0.65s cubic-bezier(0.4, 0, 0.2, 1)",
         }}>
           {stepFlow.map((stepId, i) => {
             const complete = isComplete(stepId);
@@ -959,12 +975,14 @@ function BookingStepsCarousel3D({
 
             return (
               <div
+                ref={el => cardRefs.current[i] = el}
                 key={stepId}
                 onClick={!active && complete ? () => editStep(stepId) : undefined}
                 style={{
                   position: "absolute",
                   width:    CARD_W,
-                  height:   CARD_H,
+                  height:   "auto",
+                  minHeight: isMobile ? 680 / stageScale : 680,
                   left:     `calc(50% - ${CARD_W / 2}px)`,
                   top:      0,
                   transform: `rotateY(${i * ANGLE}deg) translateZ(${RADIUS}px) scale(${active ? 1 : 0.85})`,
