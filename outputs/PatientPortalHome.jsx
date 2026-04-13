@@ -734,42 +734,38 @@ export default function PatientPortalHome({ onNavigate = () => {} }) {
         >
           <div className="flex flex-col gap-8 lg:gap-10">
 
-            <div style={{ marginTop: 4 }}><WelcomeHeader /></div>
+            {/* Welcome + Reminder: side-by-side on desktop, stacked on mobile */}
+            <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:gap-6" style={{ marginTop: 4 }}>
+              <div className="lg:flex-shrink-0"><WelcomeHeader /></div>
 
-            {/* Reminder banner (glass) */}
-            <div
-              className="flex items-center gap-3 rounded-xl px-5 py-3.5"
-              role="status"
-              style={{
-                ...glass,
-                marginTop: -21,
-              }}
-            >
-              <ClockIcon size={18} style={{ color: colors.primary, flexShrink: 0 }} />
-              <p className="text-sm" style={{ color: colors.textDark }}>
-                <span className="font-medium">Reminder:</span> Complete check-in before your appointment tomorrow at 2:00 PM.
-              </p>
-              <a
-                href="#checkin"
-                className="ml-auto text-sm font-medium whitespace-nowrap focus:outline-none focus-visible:ring-2 rounded-lg px-3 py-1.5 transition-all"
-                style={{
-                  color: colors.primary,
-                  background: "rgba(42,157,255,0.1)",
-                  border: `1px solid rgba(42,157,255,0.3)`,
-                  boxShadow: "inset 0 1px 2px rgba(42,157,255,0.06)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "rgba(42,157,255,0.18)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "rgba(42,157,255,0.1)";
-                }}
+              {/* Reminder banner (glass) */}
+              <div
+                className="flex items-center gap-3 rounded-xl px-5 py-3.5 lg:flex-1"
+                role="status"
+                style={{ ...glass }}
               >
-                Start check-in
-              </a>
+                <ClockIcon size={18} className="self-start mt-0.5" style={{ color: colors.primary, flexShrink: 0 }} />
+                <p className="text-sm" style={{ color: colors.textDark }}>
+                  <span className="font-medium">Reminder:</span> Complete check-in before your appointment tomorrow at 2:00 PM.
+                </p>
+                <a
+                  href="#checkin"
+                  className="ml-auto text-sm font-medium whitespace-nowrap focus:outline-none focus-visible:ring-2 rounded-lg px-3 py-1.5 transition-all"
+                  style={{
+                    color: colors.primary,
+                    background: "rgba(42,157,255,0.1)",
+                    border: `1px solid rgba(42,157,255,0.3)`,
+                    boxShadow: "inset 0 1px 2px rgba(42,157,255,0.06)",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(42,157,255,0.18)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(42,157,255,0.1)"; }}
+                >
+                  Start check-in
+                </a>
+              </div>
             </div>
 
-            <div style={{ marginTop: -2 }}><QuickActions onNavigate={onNavigate} /></div>
+            <QuickActions onNavigate={onNavigate} />
             <LatestUpdates />
 
           </div>
