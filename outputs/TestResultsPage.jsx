@@ -290,7 +290,7 @@ function PageSearchBar() {
 
 function DesktopNav({ onNavigate }) {
   return (
-    <nav aria-label="Main navigation" className="hidden lg:flex flex-col gap-1 pt-8 pb-6 px-4" style={{ width:210 }}>
+    <nav aria-label="Main navigation" className="hidden lg:flex flex-col gap-[8px] pt-9 pb-6 px-4" style={{ width:210 }}>
       {navItems.map((item) => {
         const IconComp = item.icon;
         const isActive = item.active;
@@ -1110,7 +1110,8 @@ export default function TestResultsPage({ onNavigate = () => {} }) {
 
         {/* Desktop sidebar */}
         <aside className="hidden lg:block flex-shrink-0"
-          style={{ borderRight:"1px solid rgba(255,255,255,0.6)" }}>
+          style={{}}>
+
           <DesktopNav onNavigate={onNavigate} />
         </aside>
 

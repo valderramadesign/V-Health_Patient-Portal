@@ -203,7 +203,7 @@ const navRoutes = { home: "home", results: "test-results", messages: "messages",
 
 function DesktopNav({ onNavigate }) {
   return (
-    <nav aria-label="Main navigation" className="hidden lg:flex flex-col gap-1 pt-8 pb-6 px-4" style={{ width: 210 }}>
+    <nav aria-label="Main navigation" className="hidden lg:flex flex-col gap-[8px] pt-9 pb-6 px-4" style={{ width: 210 }}>
       {navItems.map((item) => {
         const IconComp = item.icon;
         const isActive = item.active;
@@ -1198,7 +1198,7 @@ export default function BookAppointmentPage({ onNavigate = () => {} }) {
         {/* Desktop sidebar — position:relative + zIndex:2 so it paints on top
              of any 3D carousel cards that bleed into this area */}
         <aside className="hidden lg:block flex-shrink-0"
-          style={{ borderRight:"1px solid rgba(255,255,255,0.6)", position:"relative", zIndex:2 }}>
+          style={{ position:"relative", zIndex:2 }}>
           <DesktopNav onNavigate={onNavigate} />
         </aside>
 
@@ -1241,7 +1241,7 @@ export default function BookAppointmentPage({ onNavigate = () => {} }) {
 
                 {/* ── Right panel (desktop) ── */}
                 <div className="hidden lg:block flex-shrink-0" style={{ width: 280, position:"sticky", top:96, marginTop: 40 }}>
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-[22px]">
                     <AppointmentSummary booking={booking} format={booking.format} currentStep={currentStep} />
                     <SupportSection />
                   </div>
