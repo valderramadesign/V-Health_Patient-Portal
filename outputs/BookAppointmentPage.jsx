@@ -926,15 +926,9 @@ function BookingStepsCarousel3D({
     prevIdxRef.current = activeIndex;
   }, [activeIndex, ANGLE, nItems]);
 
-  // Opacity for each card based on its apparent angle from front.
-  // — Explicitly 0 for back-hemisphere cards (fromFront ≥ 90°) so ghost
-  //   completed cards never show through even if backfaceVisibility fails.
-  // — Also 0 for the wrap-around "prev" at step 1 and "next" at the last
-  //   step so phantom cards don't appear at the flow boundaries.
-  const cardOpacity = (i) => {
-    if (i !== activeIndex) return 0;
-    return 1;
-  };
+  // Only the active card is visible; all others are fully hidden.
+  // Step transitions crossfade smoothly via CSS opacity + transform.
+  const cardOpacity = (i) => (i === activeIndex ? 1 : 0);
 
   const canGoPrev = activeIndex > 0;
   const goPrev    = () => { if (canGoPrev) editStep(stepFlow[activeIndex - 1]); };
@@ -1021,19 +1015,7 @@ function BookingStepsCarousel3D({
                     </h2>
                   </div>
                 )}
-                {/* Gradient fade overlay for prev/next cards — skip at flow boundaries */}
-                {!active && activeIndex > 0 && i === (activeIndex - 1 + nItems) % nItems && (
-                  <div aria-hidden="true" style={{
-                    position: "absolute", inset: 0, borderRadius: 16, zIndex: 2, pointerEvents: "none",
-                    background: `linear-gradient(to right, transparent, rgba(236,238,242,0.3))`,
-                  }} />
-                )}
-                {!active && activeIndex < nItems - 1 && i === (activeIndex + 1) % nItems && (
-                  <div aria-hidden="true" style={{
-                    position: "absolute", inset: 0, borderRadius: 16, zIndex: 2, pointerEvents: "none",
-                    background: `linear-gradient(to right, rgba(236,238,242,0.3), transparent)`,
-                  }} />
-                )}
+
                 <StepShell isLocked={locked}>
                   {complete && (
                     <CompletedSummary
@@ -1143,7 +1125,6 @@ export default function BookAppointmentPage({ onNavigate = () => {} }) {
     const idx = stepFlow.indexOf(id);
     const toClear = stepFlow.slice(idx + 1);
     const cleared = { ...booking };
-    const fieldMap = { careType:"careType", provider:"provider", format:"format", location:"location", datetime_date:"date", datetime_time:"time" };
     toClear.forEach(s => {
       if (s === "datetime") { cleared.date = null; cleared.time = null; }
       else cleared[s] = null;
