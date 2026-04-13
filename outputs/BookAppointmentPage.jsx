@@ -1078,7 +1078,7 @@ function BookingStepsCarousel3D({
       </div>
 
       {/* ── Step progress dots ── */}
-      <div className="flex items-center justify-center gap-2" style={{ marginTop: 60, marginBottom: isMobile ? 27 : 0, position: "relative", zIndex: 10 }}>
+      <div className="flex items-center justify-center gap-2" style={{ marginTop: 120, marginBottom: isMobile ? 27 : 0, position: "relative", zIndex: 10 }}>
         {stepFlow.map((stepId, i) => {
           const active    = isActive(stepId);
           const complete  = isComplete(stepId);
