@@ -875,10 +875,12 @@ function BookingStepsCarousel3D({
   const cardRefs = useRef([]);
   const [activeCardHeight, setActiveCardHeight] = useState(680);
 
+  const TOP_MARGIN = isMobile ? 44 : 54;
+  
   // Stage height calculated exactly so the perspective-projected card bottom lands
   // exactly at the stage boundary on both mobile and desktop.
-  // Using a fixed perspectiveOrigin Y (140px) prevents the top from shifting.
-  const STAGE_H    = Math.round(140 + activeCardHeight * stageScale);
+  // We subtract 150px as requested to remove the anomalous gap before the step dots.
+  const STAGE_H    = Math.round(TOP_MARGIN + activeCardHeight * stageScale) - 150;
 
   // Track the rotation as a running accumulator so transitions always go the
   // short way round and we never "wrap" through 360°.
@@ -955,13 +957,13 @@ function BookingStepsCarousel3D({
       <div style={{
         height: STAGE_H,
         perspective: PERSP,
-        perspectiveOrigin: "50% 140px",
+        perspectiveOrigin: `50% ${TOP_MARGIN}px`,
         overflow: "visible",
         position: "relative",
       }}>
         <div style={{
           height: activeCardHeight,
-          marginTop: 140,
+          marginTop: TOP_MARGIN,
           position: "relative",
           transformStyle: "preserve-3d",
           transform: `rotateY(${rotation}deg)`,
@@ -1233,16 +1235,16 @@ export default function BookAppointmentPage({ onNavigate = () => {} }) {
           ) : (
             <>
               {/* Page intro */}
-              <div className="mb-8">
+              <div>
                 <h1 className="font-semibold mb-1" style={{ color:colors.textDark, fontSize:26 }}>Book appointment</h1>
-                <p className="text-sm" style={{ color:colors.textMuted }}>Find the right visit and choose a time that works for you.</p>
+                <p className="text-sm" style={{ color:colors.textMuted, marginBottom: 24 }}>Find the right visit and choose a time that works for you.</p>
               </div>
 
               {/* Two-column layout on desktop */}
               <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-start">
 
                 {/* ── 3D Booking carousel ── */}
-                <div className="flex-1 min-w-0 w-full mt-[39px] lg:mt-4">
+                <div className="flex-1 min-w-0 w-full mt-0">
                   <BookingStepsCarousel3D
                     stepFlow={stepFlow}
                     stepLabels={stepLabels}
