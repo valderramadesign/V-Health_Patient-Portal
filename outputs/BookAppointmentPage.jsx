@@ -1237,7 +1237,7 @@ export default function BookAppointmentPage({ onNavigate = () => {} }) {
               {/* Page intro */}
               <div>
                 <h1 className="font-semibold mb-1" style={{ color:colors.textDark, fontSize:26 }}>Book appointment</h1>
-                <p className="text-sm" style={{ color:colors.textMuted, marginBottom: 24 }}>Find the right visit and choose a time that works for you.</p>
+                <p className="text-sm" style={{ color:colors.textMuted, marginBottom: 44 }}>Find the right visit and choose a time that works for you.</p>
               </div>
 
               {/* Two-column layout on desktop */}
