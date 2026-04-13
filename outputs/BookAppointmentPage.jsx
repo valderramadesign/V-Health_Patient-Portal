@@ -59,6 +59,8 @@ const colors = {
   error:       "#E8887D",
   purple:      "#7C6FD8",
   purpleBg:    "#F3F1FE",
+  orange:      "#F97316",
+  orangeBg:    "#FFF7ED",
 };
 
 const glass = {
@@ -158,11 +160,11 @@ const afternoonSlots= ["12:00 PM", "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "
 const unavailableSlots = new Set(["8:00 AM", "10:00 AM", "1:00 PM", "3:00 PM"]);
 
 const navItems = [
-  { icon: HomeIcon,      label: "Home",            id: "home",         active: false },
-  { icon: CalendarIcon,  label: "Appointments",    id: "appointments", active: true  },
-  { icon: ClipboardIcon, label: "Test Results",    id: "results",      active: false },
-  { icon: PillIcon,      label: "Request Refills", id: "refills",      active: false },
-  { icon: MessageIcon,   label: "Messages",        id: "messages",     active: false, badge: 1 },
+  { icon: HomeIcon,      label: "Home",            id: "home",         active: false, color: colors.orange,  bg: colors.orangeBg  },
+  { icon: CalendarIcon,  label: "Appointments",    id: "appointments", active: true,  color: colors.primary, bg: colors.skyTint   },
+  { icon: ClipboardIcon, label: "Test Results",    id: "results",      active: false, color: colors.purple,  bg: colors.purpleBg  },
+  { icon: PillIcon,      label: "Request Refills", id: "refills",      active: false, color: colors.warning, bg: colors.warningBg },
+  { icon: MessageIcon,   label: "Messages",        id: "messages",     active: false, color: colors.success, bg: colors.successBg, badge: 1 },
 ];
 
 /* ─────────────────────────────────────────────
@@ -199,7 +201,7 @@ function SearchBar() {
   );
 }
 
-const navRoutes = { home: "home", results: "test-results", messages: "messages" };
+const navRoutes = { home: "home", results: "test-results", messages: "messages", refills: "refill-request" };
 
 function DesktopNav({ onNavigate }) {
   return (
@@ -210,20 +212,20 @@ function DesktopNav({ onNavigate }) {
         return (
           <a key={item.id} href={`#${item.id}`} aria-current={isActive ? "page" : undefined}
             onClick={navRoutes[item.id] ? (e) => { e.preventDefault(); onNavigate(navRoutes[item.id]); } : undefined}
-            className="relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2"
+            className="relative flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2"
             style={{
-              color: isActive ? colors.primary : colors.textMuted,
-              background: isActive ? glassSelected.background : glass.background,
-              border: isActive ? glassSelected.border : glass.border,
-              boxShadow: isActive ? glassSelected.boxShadow : glass.boxShadow,
+              color: colors.textDark,
+              background: isActive ? item.bg : glass.background,
+              border: isActive ? `1px solid ${item.color}35` : glass.border,
+              boxShadow: isActive ? `0 2px 8px ${item.color}20, ${glass.boxShadow}` : glass.boxShadow,
               backdropFilter: glass.backdropFilter, WebkitBackdropFilter: glass.WebkitBackdropFilter,
             }}
-            onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.background=glassHover.background; e.currentTarget.style.boxShadow=glassHover.boxShadow; }}}
-            onMouseLeave={(e) => { if (!isActive) { e.currentTarget.style.background=glass.background; e.currentTarget.style.boxShadow=glass.boxShadow; }}}
+            onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.background=glassHover.background; e.currentTarget.style.boxShadow=glassHover.boxShadow; e.currentTarget.style.border=`1px solid rgba(255,255,255,0.95)`; }}}
+            onMouseLeave={(e) => { if (!isActive) { e.currentTarget.style.background=glass.background; e.currentTarget.style.boxShadow=glass.boxShadow; e.currentTarget.style.border=glass.border; }}}
           >
-            <span className="flex items-center justify-center rounded-lg flex-shrink-0"
-              style={{ width: 30, height: 30, background: isActive ? "rgba(42,157,255,0.15)" : "rgba(255,255,255,0.5)", color: isActive ? colors.primary : colors.textMuted }}>
-              <IconComp size={17} />
+            <span className="flex items-center justify-center rounded-xl flex-shrink-0"
+              style={{ width: 40, height: 40, background: item.bg, color: item.color }}>
+              <IconComp size={20} />
             </span>
             <span>{item.label}</span>
             {item.badge && (
@@ -253,9 +255,9 @@ function MobileNav({ onNavigate }) {
           <a key={item.id} href={`#${item.id}`} aria-current={isActive ? "page" : undefined}
             onClick={navRoutes[item.id] ? (e) => { e.preventDefault(); onNavigate(navRoutes[item.id]); } : undefined}
             className="relative flex flex-col items-center justify-center gap-0.5 py-2.5 px-2 flex-1 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset"
-            style={{ color: isActive ? colors.primary : colors.textMuted, minHeight: 56 }}>
+            style={{ color: isActive ? item.color : colors.textMuted, minHeight: 56 }}>
             {isActive && <span className="absolute top-0 left-1/2 -translate-x-1/2 rounded-b-full"
-              style={{ width: 24, height: 3, background: colors.primary }} aria-hidden="true" />}
+              style={{ width: 24, height: 3, background: item.color }} aria-hidden="true" />}
             <span className="relative">
               <IconComp size={20} />
               {item.badge && <span className="absolute -top-1 -right-1.5 flex items-center justify-center rounded-full text-white"
@@ -378,39 +380,12 @@ function OptionCard({ selected, onClick, children, className = "" }) {
   );
 }
 
-/* ── Step shell: number badge + title + optional edit ── */
-function StepShell({ number, title, isComplete, isActive, isLocked, onEdit, children }) {
+/* ── Step shell: pure glass card, header lives outside in the carousel ── */
+function StepShell({ isLocked, children }) {
   return (
-    <div className="rounded-2xl overflow-hidden transition-all duration-200"
-      style={{ ...glass, opacity: isLocked ? 0.45 : 1 }}>
-      {/* Step header row */}
-      <div className="flex items-center gap-3 px-5 py-4"
-        style={{ borderBottom: (isActive || isComplete) ? "1px solid rgba(255,255,255,0.5)" : "none" }}>
-        {/* Number / check badge */}
-        <span className="flex-shrink-0 flex items-center justify-center rounded-full w-7 h-7 text-xs font-bold"
-          style={{
-            background: isComplete ? colors.success : isActive ? colors.primary : "rgba(255,255,255,0.5)",
-            color: isComplete || isActive ? "#fff" : colors.textMuted,
-          }}>
-          {isComplete ? <Check size={13} strokeWidth={2.5} /> : number}
-        </span>
-        <h2 className="flex-1 font-semibold text-sm" style={{ color: isLocked ? colors.textMuted : colors.textDark }}>
-          {title}
-        </h2>
-        {isComplete && onEdit && (
-          <button onClick={onEdit}
-            className="flex items-center gap-1 text-xs font-medium rounded-lg px-2.5 py-1 transition-all focus:outline-none"
-            style={{ color:colors.primary, background:"rgba(42,157,255,0.08)", border:"1px solid rgba(42,157,255,0.2)" }}
-            onMouseEnter={(e)=>(e.currentTarget.style.background="rgba(42,157,255,0.14)")}
-            onMouseLeave={(e)=>(e.currentTarget.style.background="rgba(42,157,255,0.08)")}>
-            <EditIcon size={11} /> Edit
-          </button>
-        )}
-      </div>
-      {/* Expandable content */}
-      {(isActive || isComplete) && (
-        <div className="px-5 py-5">{children}</div>
-      )}
+    <div className="rounded-2xl overflow-hidden"
+      style={{ ...glass, borderRadius: 16, height: "100%", padding: 24, opacity: isLocked ? 0.45 : 1 }}>
+      {children}
     </div>
   );
 }
@@ -870,6 +845,249 @@ function SupportSection() {
 }
 
 /* ─────────────────────────────────────────────
+   3D BOOKING STEPS CAROUSEL
+   ───────────────────────────────────────────── */
+function BookingStepsCarousel3D({
+  stepFlow, stepLabels, booking, currentStep,
+  isComplete, isActive, isLocked, editStep,
+  handleCareType, handleProvider, handleFormat,
+  handleLocation, handleDate, handleTime, handleConfirm,
+}) {
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== "undefined" ? window.innerWidth : 1280
+  );
+  useEffect(() => {
+    const h = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", h);
+    return () => window.removeEventListener("resize", h);
+  }, []);
+
+  const isMobile   = windowWidth < 768;
+  const CARD_W     = isMobile ? Math.min(300, windowWidth - 48) : 430;
+  const CARD_H     = isMobile ? 736 : 680;
+  const nItems     = stepFlow.length;
+  const ANGLE      = 360 / nItems;
+  const RADIUS     = isMobile ? 260 : 400;
+  const PERSP      = isMobile ? 1400 : 2200;
+  // Stage height sized so the perspective-projected card bottom lands exactly
+  // at the stage boundary on both mobile and desktop — no blank CSS gap below
+  // the visual card edge before the step dots.
+  const stageScale = PERSP / (PERSP - RADIUS);
+  const STAGE_H    = Math.round(2 * stageScale * (140 + CARD_H) / (1 + stageScale));
+
+  const activeIndex = stepFlow.indexOf(currentStep);
+
+  // Track the rotation as a running accumulator so transitions always go the
+  // short way round and we never "wrap" through 360°.
+  // When nItems changes (e.g. video vs in-person removes/adds the location step),
+  // ANGLE changes too — the old accumulated value is no longer valid so we
+  // hard-reset to the correct absolute angle for the current index.
+  const rotRef = useRef(-activeIndex * ANGLE);
+  const [rotation, setRotation] = useState(rotRef.current);
+  const prevIdxRef    = useRef(activeIndex);
+  const prevNItemsRef = useRef(nItems);
+
+  useEffect(() => {
+    const flowChanged = prevNItemsRef.current !== nItems;
+    prevNItemsRef.current = nItems;
+
+    if (flowChanged) {
+      // stepFlow length changed — discard accumulated value and snap to
+      // the exact absolute angle for the new index / new ANGLE.
+      const newRot = -activeIndex * ANGLE;
+      rotRef.current = newRot;
+      setRotation(newRot);
+      prevIdxRef.current = activeIndex;
+      return;
+    }
+
+    if (prevIdxRef.current === activeIndex) return;
+    const delta = activeIndex - prevIdxRef.current;
+    rotRef.current -= delta * ANGLE;
+    setRotation(rotRef.current);
+    prevIdxRef.current = activeIndex;
+  }, [activeIndex, ANGLE, nItems]);
+
+  // Opacity for each card based on its apparent angle from front.
+  // — Explicitly 0 for back-hemisphere cards (fromFront ≥ 90°) so ghost
+  //   completed cards never show through even if backfaceVisibility fails.
+  // — Also 0 for the wrap-around "prev" at step 1 and "next" at the last
+  //   step so phantom cards don't appear at the flow boundaries.
+  const cardOpacity = (i) => {
+    const wrapPrev = (activeIndex - 1 + nItems) % nItems;
+    const wrapNext = (activeIndex + 1) % nItems;
+    if (activeIndex === 0          && i === wrapPrev) return 0;
+    if (activeIndex === nItems - 1 && i === wrapNext) return 0;
+    const worldAngle = ((i * ANGLE) - (activeIndex * ANGLE) + 3600) % 360;
+    const fromFront  = worldAngle > 180 ? 360 - worldAngle : worldAngle;
+    if (fromFront >= 90) return 0;
+    return Math.max(0.18, 1 - (fromFront / 160) * 0.85);
+  };
+
+  const canGoPrev = activeIndex > 0;
+  const goPrev    = () => { if (canGoPrev) editStep(stepFlow[activeIndex - 1]); };
+
+  const dayNames   = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  return (
+    <div style={{ position: "relative", width: "100%" }}>
+
+      {/* ── 3D stage — header is rendered AFTER the rotating container so it
+           paints on top of the 3D layer; marginTop pushes cards below header ── */}
+      <div style={{
+        height: STAGE_H,
+        perspective: PERSP,
+        perspectiveOrigin: "50% 50%",
+        overflow: "visible",
+        position: "relative",
+      }}>
+        <div style={{
+          height: CARD_H,
+          marginTop: 140,
+          position: "relative",
+          transformStyle: "preserve-3d",
+          transform: `rotateY(${rotation}deg)`,
+          transition: "transform 0.65s cubic-bezier(0.4, 0, 0.2, 1)",
+        }}>
+          {stepFlow.map((stepId, i) => {
+            const complete = isComplete(stepId);
+            const active   = isActive(stepId);
+            const locked   = isLocked(stepId);
+            const opacity  = cardOpacity(i);
+
+            return (
+              <div
+                key={stepId}
+                onClick={!active && complete ? () => editStep(stepId) : undefined}
+                style={{
+                  position: "absolute",
+                  width:    CARD_W,
+                  height:   CARD_H,
+                  left:     `calc(50% - ${CARD_W / 2}px)`,
+                  top:      0,
+                  transform: `rotateY(${i * ANGLE}deg) translateZ(${RADIUS}px) scale(${active ? 1 : 0.85})`,
+                  opacity,
+                  cursor:   !active && complete ? "pointer" : "default",
+                  transition: "opacity 0.35s, transform 0.45s cubic-bezier(0.4, 0, 0.2, 1)",
+                  backfaceVisibility:       "hidden",
+                  WebkitBackfaceVisibility: "hidden",
+                }}
+              >
+                {/* ── Header: lives in the card's 3D space, above the glass card ── */}
+                {active && (
+                  <div className="flex items-start gap-3"
+                    style={{
+                      position: "absolute",
+                      bottom: "100%",
+                      marginBottom: isMobile ? 14 : 24,
+                      left: 0,
+                      width: CARD_W,
+                    }}>
+                    {canGoPrev && (
+                      <button
+                        onClick={goPrev}
+                        className="flex-shrink-0 flex items-center justify-center rounded-lg transition-all focus:outline-none focus-visible:ring-2"
+                        style={{ width: 30, height: 30, color: colors.textMuted, background: "rgba(255,255,255,0.55)", border: "1px solid rgba(255,255,255,0.85)" }}
+                        onMouseEnter={(e) => { e.currentTarget.style.color = colors.textDark; e.currentTarget.style.background = "rgba(255,255,255,0.8)"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = colors.textMuted; e.currentTarget.style.background = "rgba(255,255,255,0.55)"; }}
+                        aria-label="Go back to previous step"
+                      >
+                        <ChevronLeft size={16} />
+                      </button>
+                    )}
+                    <span className="flex-shrink-0 flex items-center justify-center rounded-full w-7 h-7 text-xs font-bold"
+                      style={{ background: colors.primary, color: "#fff" }}>
+                      {activeIndex + 1}
+                    </span>
+                    <h2 className="font-semibold" style={{ color: colors.textDark, fontSize: 18, lineHeight: "25px" }}>
+                      {stepLabels[currentStep]}
+                    </h2>
+                  </div>
+                )}
+                {/* Gradient fade overlay for prev/next cards — skip at flow boundaries */}
+                {!active && activeIndex > 0 && i === (activeIndex - 1 + nItems) % nItems && (
+                  <div aria-hidden="true" style={{
+                    position: "absolute", inset: 0, borderRadius: 16, zIndex: 2, pointerEvents: "none",
+                    background: `linear-gradient(to right, transparent, rgba(236,238,242,0.3))`,
+                  }} />
+                )}
+                {!active && activeIndex < nItems - 1 && i === (activeIndex + 1) % nItems && (
+                  <div aria-hidden="true" style={{
+                    position: "absolute", inset: 0, borderRadius: 16, zIndex: 2, pointerEvents: "none",
+                    background: `linear-gradient(to right, rgba(236,238,242,0.3), transparent)`,
+                  }} />
+                )}
+                <StepShell isLocked={locked}>
+                  {complete && (
+                    <CompletedSummary
+                      icon={
+                        stepId === "careType"  ? ScopeIcon    :
+                        stepId === "provider"  ? UserIcon     :
+                        stepId === "format"    ? VideoIcon    :
+                        stepId === "location"  ? BuildingIcon : CalendarIcon
+                      }
+                      label={
+                        stepId === "careType"  ? booking.careType?.label  :
+                        stepId === "provider"  ? booking.provider?.name   :
+                        stepId === "format"    ? booking.format?.label    :
+                        stepId === "location"  ? booking.location?.name   :
+                        `${booking.date
+                          ? `${dayNames[booking.date.getDay()]} ${monthNames[booking.date.getMonth()]} ${booking.date.getDate()}`
+                          : ""}${booking.time ? " · " + booking.time : ""}`
+                      }
+                    />
+                  )}
+                  {active && (
+                    stepId === "careType"  ? <CareTypeStep  value={booking.careType}  onSelect={handleCareType}  /> :
+                    stepId === "provider"  ? <ProviderStep  value={booking.provider}  onSelect={handleProvider}  /> :
+                    stepId === "format"    ? <FormatStep    value={booking.format}    onSelect={handleFormat}    /> :
+                    stepId === "location"  ? <LocationStep  value={booking.location}  onSelect={handleLocation}  /> :
+                    stepId === "datetime"  ? <DateTimeStep  date={booking.date} time={booking.time}
+                                              onDateSelect={handleDate} onTimeSelect={handleTime} /> :
+                    stepId === "review"    ? <ReviewStep    booking={booking} format={booking.format}
+                                              onConfirm={handleConfirm} /> :
+                    null
+                  )}
+                </StepShell>
+              </div>
+            );
+          })}
+        </div>
+
+      </div>
+
+      {/* ── Step progress dots ── */}
+      <div className="flex items-center justify-center gap-2" style={{ marginTop: -24, position: "relative", zIndex: 10 }}>
+        {stepFlow.map((stepId, i) => {
+          const active    = isActive(stepId);
+          const complete  = isComplete(stepId);
+          return (
+            <button
+              key={stepId}
+              onClick={complete ? () => editStep(stepId) : undefined}
+              aria-label={`${active ? "Current" : complete ? "Completed" : "Upcoming"}: ${stepLabels[stepId]}`}
+              style={{
+                width:      active ? 28 : 8,
+                height:     8,
+                borderRadius: 4,
+                padding:    0,
+                border:     "none",
+                background: active ? colors.primary : complete ? colors.success : "rgba(0,0,0,0.12)",
+                transition: "all 0.3s",
+                cursor:     complete ? "pointer" : "default",
+                flexShrink: 0,
+              }}
+            />
+          );
+        })}
+      </div>
+
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────
    MAIN PAGE
    ───────────────────────────────────────────── */
 export default function BookAppointmentPage({ onNavigate = () => {} }) {
@@ -982,14 +1200,15 @@ export default function BookAppointmentPage({ onNavigate = () => {} }) {
       {/* ── BODY ── */}
       <div className="flex flex-1 max-w-screen-xl mx-auto w-full">
 
-        {/* Desktop sidebar */}
+        {/* Desktop sidebar — position:relative + zIndex:2 so it paints on top
+             of any 3D carousel cards that bleed into this area */}
         <aside className="hidden lg:block flex-shrink-0"
-          style={{ borderRight:"1px solid rgba(255,255,255,0.6)", background:"rgba(255,255,255,0.3)" }}>
+          style={{ borderRight:"1px solid rgba(255,255,255,0.6)", background: colors.bgPage, position:"relative", zIndex:2 }}>
           <DesktopNav onNavigate={onNavigate} />
         </aside>
 
         {/* Main */}
-        <main className="flex-1 px-5 lg:px-10 py-8 lg:py-10 pb-28 lg:pb-12" style={{ minWidth:0 }}>
+        <main className="flex-1 px-5 lg:px-8 pt-7 pb-28 lg:pb-8" style={{ minWidth:0 }}>
 
           {confirmed ? (
             <ConfirmedScreen booking={booking} onReset={handleReset} onNavigate={onNavigate} />
@@ -997,15 +1216,6 @@ export default function BookAppointmentPage({ onNavigate = () => {} }) {
             <>
               {/* Page intro */}
               <div className="mb-8">
-                <div className="flex items-center gap-2 mb-1">
-                  <button onClick={() => onNavigate("home")} className="text-sm focus:outline-none bg-transparent border-none p-0" style={{ color:colors.textMuted }}
-                    onMouseEnter={(e)=>(e.currentTarget.style.color=colors.primary)}
-                    onMouseLeave={(e)=>(e.currentTarget.style.color=colors.textMuted)}>
-                    Home
-                  </button>
-                  <ChevronRight size={13} style={{ color:colors.textMuted }} />
-                  <span className="text-sm font-medium" style={{ color:colors.textDark }}>Book appointment</span>
-                </div>
                 <h1 className="font-semibold mb-1" style={{ color:colors.textDark, fontSize:26 }}>Book appointment</h1>
                 <p className="text-sm" style={{ color:colors.textMuted }}>Find the right visit and choose a time that works for you.</p>
               </div>
@@ -1013,50 +1223,29 @@ export default function BookAppointmentPage({ onNavigate = () => {} }) {
               {/* Two-column layout on desktop */}
               <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-start">
 
-                {/* ── Booking flow ── */}
-                <div className="flex-1 min-w-0 w-full flex flex-col gap-4">
-                  {stepFlow.map((stepId, i) => {
-                    const complete = isComplete(stepId);
-                    const active   = isActive(stepId);
-                    const locked   = isLocked(stepId);
-
-                    return (
-                      <StepShell key={stepId}
-                        number={i + 1}
-                        title={stepLabels[stepId]}
-                        isComplete={complete}
-                        isActive={active}
-                        isLocked={locked}
-                        onEdit={complete ? () => editStep(stepId) : null}
-                      >
-                        {complete && (
-                          <CompletedSummary
-                            icon={stepId === "careType" ? ScopeIcon : stepId === "provider" ? UserIcon : stepId === "format" ? VideoIcon : stepId === "location" ? BuildingIcon : CalendarIcon}
-                            label={
-                              stepId === "careType"  ? booking.careType?.label  :
-                              stepId === "provider"  ? booking.provider?.name   :
-                              stepId === "format"    ? booking.format?.label     :
-                              stepId === "location"  ? booking.location?.name    :
-                              stepId === "datetime"  ? `${booking.date ? ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][booking.date.getDay()] + " " + ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][booking.date.getMonth()] + " " + booking.date.getDate() : ""}${booking.time ? " · " + booking.time : ""}` : ""
-                            }
-                          />
-                        )}
-                        {active && (
-                          stepId === "careType"  ? <CareTypeStep value={booking.careType} onSelect={handleCareType} /> :
-                          stepId === "provider"  ? <ProviderStep value={booking.provider} onSelect={handleProvider} /> :
-                          stepId === "format"    ? <FormatStep value={booking.format} onSelect={handleFormat} /> :
-                          stepId === "location"  ? <LocationStep value={booking.location} onSelect={handleLocation} /> :
-                          stepId === "datetime"  ? <DateTimeStep date={booking.date} time={booking.time} onDateSelect={handleDate} onTimeSelect={handleTime} /> :
-                          stepId === "review"    ? <ReviewStep booking={booking} format={booking.format} onConfirm={handleConfirm} /> :
-                          null
-                        )}
-                      </StepShell>
-                    );
-                  })}
+                {/* ── 3D Booking carousel ── */}
+                <div className="flex-1 min-w-0 w-full mt-[39px] lg:mt-4">
+                  <BookingStepsCarousel3D
+                    stepFlow={stepFlow}
+                    stepLabels={stepLabels}
+                    booking={booking}
+                    currentStep={currentStep}
+                    isComplete={isComplete}
+                    isActive={isActive}
+                    isLocked={isLocked}
+                    editStep={editStep}
+                    handleCareType={handleCareType}
+                    handleProvider={handleProvider}
+                    handleFormat={handleFormat}
+                    handleLocation={handleLocation}
+                    handleDate={handleDate}
+                    handleTime={handleTime}
+                    handleConfirm={handleConfirm}
+                  />
                 </div>
 
                 {/* ── Right panel (desktop) ── */}
-                <div className="hidden lg:block flex-shrink-0" style={{ width: 280, position:"sticky", top:96 }}>
+                <div className="hidden lg:block flex-shrink-0" style={{ width: 280, position:"sticky", top:96, marginTop: 55 }}>
                   <div className="flex flex-col gap-4">
                     <AppointmentSummary booking={booking} format={booking.format} currentStep={currentStep} />
                     <SupportSection />
