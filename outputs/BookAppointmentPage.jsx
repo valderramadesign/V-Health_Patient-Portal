@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Search, X, ChevronRight, Video, Send, Check, MapPin, ChevronLeft, Clock } from "lucide-react";
+import vHealthLogo from "../assets/V-Health_logo.png";
 
 /* ─────────────────────────────────────────────
    BACKGROUND ANIMATION  (matches homepage)
@@ -173,10 +174,7 @@ const navItems = [
 function Logo() {
   return (
     <div className="flex items-center gap-2.5 select-none">
-      <div className="flex items-center justify-center rounded-xl flex-shrink-0"
-        style={{ width: 36, height: 36, background: `linear-gradient(135deg, ${colors.primary}, #5BB8FF)` }}>
-        <span className="text-white font-bold text-sm leading-none" aria-hidden="true">V</span>
-      </div>
+      <img src={vHealthLogo} alt="V-Health Logo" className="flex-shrink-0" style={{ width: 36, height: 36, objectFit: "contain" }} />
       <div className="flex flex-col leading-tight">
         <span className="font-semibold text-sm tracking-wide" style={{ color: colors.textDark }}>VALDERRAMA</span>
         <span className="text-xs tracking-widest -mt-0.5" style={{ color: colors.textMuted }}>HEALTH</span>
