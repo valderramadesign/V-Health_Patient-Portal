@@ -146,7 +146,7 @@ const updates = [
 const quickActions = [
   { icon: CalendarIcon,  label: "Book appointment",   color: colors.primary, bg: colors.skyTint,   route: "book-appointment" },
   { icon: ClipboardIcon, label: "View results",       color: colors.purple,  bg: colors.purpleBg,  route: "test-results" },
-  { icon: PillIcon,      label: "Renew prescription", color: colors.warning, bg: colors.warningBg, route: null },
+  { icon: PillIcon,      label: "Renew prescription", color: colors.warning, bg: colors.warningBg, route: "refill-request" },
   { icon: MessageIcon,   label: "Message care team",  color: colors.success, bg: colors.successBg, route: "messages" },
 ];
 
