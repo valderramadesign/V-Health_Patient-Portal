@@ -863,7 +863,7 @@ function BookingStepsCarousel3D({
   }, []);
 
   const isMobile   = windowWidth < 768;
-  const CARD_W     = isMobile ? Math.min(300, windowWidth - 48) : 430;
+  const CARD_W     = isMobile ? windowWidth - 40 : 430;
   const CARD_H     = isMobile ? 736 : 680;
   const nItems     = stepFlow.length;
   const ANGLE      = 360 / nItems;
