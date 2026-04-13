@@ -1109,9 +1109,7 @@ export default function TestResultsPage({ onNavigate = () => {} }) {
       <div className="flex flex-1 max-w-screen-xl mx-auto w-full">
 
         {/* Desktop sidebar */}
-        <aside className="hidden lg:block flex-shrink-0"
-          style={{}}>
-
+        <aside className="hidden lg:block flex-shrink-0">
           <DesktopNav onNavigate={onNavigate} />
         </aside>
 
