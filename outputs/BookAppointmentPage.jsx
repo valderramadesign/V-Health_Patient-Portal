@@ -1253,9 +1253,8 @@ export default function BookAppointmentPage({ onNavigate = () => {} }) {
                 </div>
               </div>
 
-              {/* Mobile: summary + support below flow */}
+              {/* Mobile: support below flow */}
               <div className="lg:hidden mt-6 flex flex-col gap-4">
-                <AppointmentSummary booking={booking} format={booking.format} currentStep={currentStep} />
                 <SupportSection />
               </div>
             </>
