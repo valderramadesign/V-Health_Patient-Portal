@@ -1058,7 +1058,7 @@ function BookingStepsCarousel3D({
       </div>
 
       {/* ── Step progress dots ── */}
-      <div className="flex items-center justify-center gap-2" style={{ marginTop: -150, position: "relative", zIndex: 10 }}>
+      <div className="flex items-center justify-center gap-2" style={{ marginTop: -150, marginBottom: isMobile ? 27 : 0, position: "relative", zIndex: 10 }}>
         {stepFlow.map((stepId, i) => {
           const active    = isActive(stepId);
           const complete  = isComplete(stepId);
@@ -1254,7 +1254,7 @@ export default function BookAppointmentPage({ onNavigate = () => {} }) {
               </div>
 
               {/* Mobile: support below flow */}
-              <div className="lg:hidden mt-6 flex flex-col gap-4">
+              <div className="lg:hidden mt-6 flex flex-col gap-4" style={{ paddingBottom: 27 }}>
                 <SupportSection />
               </div>
             </>
