@@ -863,16 +863,16 @@ function BookingStepsCarousel3D({
   }, []);
 
   const isMobile   = windowWidth < 768;
-  const CARD_W     = isMobile ? windowWidth - 40 : 430;
-  const CARD_H     = isMobile ? 736 : 680;
-  const nItems     = stepFlow.length;
-  const ANGLE      = 360 / nItems;
   const RADIUS     = isMobile ? 260 : 400;
   const PERSP      = isMobile ? 1400 : 2200;
+  const stageScale = PERSP / (PERSP - RADIUS);
+  const CARD_W     = isMobile ? (windowWidth - 40) / stageScale : 430;
+  const CARD_H     = isMobile ? 736 / stageScale : 680;
+  const nItems     = stepFlow.length;
+  const ANGLE      = 360 / nItems;
   // Stage height sized so the perspective-projected card bottom lands exactly
   // at the stage boundary on both mobile and desktop — no blank CSS gap below
   // the visual card edge before the step dots.
-  const stageScale = PERSP / (PERSP - RADIUS);
   const STAGE_H    = Math.round(2 * stageScale * (140 + CARD_H) / (1 + stageScale));
 
   const activeIndex = stepFlow.indexOf(currentStep);
@@ -914,6 +914,7 @@ function BookingStepsCarousel3D({
   // — Also 0 for the wrap-around "prev" at step 1 and "next" at the last
   //   step so phantom cards don't appear at the flow boundaries.
   const cardOpacity = (i) => {
+    if (isMobile && i !== activeIndex) return 0;
     const wrapPrev = (activeIndex - 1 + nItems) % nItems;
     const wrapNext = (activeIndex + 1) % nItems;
     if (activeIndex === 0          && i === wrapPrev) return 0;
