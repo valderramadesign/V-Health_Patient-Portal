@@ -224,7 +224,7 @@ function HeaderSearchBar() {
 
 function DesktopNav({ onNavigate }) {
   return (
-    <nav aria-label="Main navigation" className="hidden lg:flex flex-col gap-1.5 pt-7 pb-6 px-4" style={{ width: 210 }}>
+    <nav aria-label="Main navigation" className="hidden lg:flex flex-col gap-1 pt-8 pb-6 px-4" style={{ width: 210 }}>
       {navItems.map((item) => {
         const IconComp = item.icon;
         const isActive = item.active;
