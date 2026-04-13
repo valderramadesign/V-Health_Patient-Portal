@@ -932,15 +932,8 @@ function BookingStepsCarousel3D({
   // — Also 0 for the wrap-around "prev" at step 1 and "next" at the last
   //   step so phantom cards don't appear at the flow boundaries.
   const cardOpacity = (i) => {
-    if (isMobile && i !== activeIndex) return 0;
-    const wrapPrev = (activeIndex - 1 + nItems) % nItems;
-    const wrapNext = (activeIndex + 1) % nItems;
-    if (activeIndex === 0          && i === wrapPrev) return 0;
-    if (activeIndex === nItems - 1 && i === wrapNext) return 0;
-    const worldAngle = ((i * ANGLE) - (activeIndex * ANGLE) + 3600) % 360;
-    const fromFront  = worldAngle > 180 ? 360 - worldAngle : worldAngle;
-    if (fromFront >= 90) return 0;
-    return Math.max(0.18, 1 - (fromFront / 160) * 0.85);
+    if (i !== activeIndex) return 0;
+    return 1;
   };
 
   const canGoPrev = activeIndex > 0;
@@ -949,8 +942,11 @@ function BookingStepsCarousel3D({
   const dayNames   = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
   const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
+  // Calculate the mathematically projected visual width of the active card
+  const projectedWidth = isMobile ? "100%" : Math.round(CARD_W * stageScale);
+
   return (
-    <div style={{ position: "relative", width: "100%" }}>
+    <div style={{ position: "relative", width: projectedWidth }}>
 
       {/* ── 3D stage — header is rendered AFTER the rotating container so it
            paints on top of the 3D layer; marginTop pushes cards below header ── */}
@@ -1241,10 +1237,10 @@ export default function BookAppointmentPage({ onNavigate = () => {} }) {
               </div>
 
               {/* Two-column layout on desktop */}
-              <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 lg:items-start">
+              <div className="flex flex-col lg:flex-row gap-6 lg:gap-6 lg:items-start">
 
                 {/* ── 3D Booking carousel ── */}
-                <div className="flex-1 min-w-0 w-full mt-0">
+                <div className="w-full lg:w-auto lg:flex-shrink-0 mt-0">
                   <BookingStepsCarousel3D
                     stepFlow={stepFlow}
                     stepLabels={stepLabels}
