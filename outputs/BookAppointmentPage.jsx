@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { Search, X, ChevronRight, Video, Send, Check, MapPin, ChevronLeft, Clock } from "lucide-react";
-import vHealthLogo from "../assets/V-Health_logo.png";
+import { Search, X, Send, Check, MapPin, ChevronLeft, Clock } from "lucide-react";
+import vHealthLogo from "../assets/V-Health_Logo.png";
 
 /* ─────────────────────────────────────────────
    BACKGROUND ANIMATION  (matches homepage)
@@ -106,7 +106,6 @@ const MoreIcon      = (p) => <Icon {...p}><circle cx="12" cy="12" r="1"/><circle
 const BuildingIcon  = (p) => <Icon {...p}><rect x="4" y="2" width="16" height="20" rx="1"/><line x1="9" y1="22" x2="9" y2="12"/><line x1="15" y1="22" x2="15" y2="12"/><rect x="9" y="12" width="6" height="10"/><line x1="9" y1="7" x2="9" y2="7.01"/><line x1="15" y1="7" x2="15" y2="7.01"/><line x1="9" y1="4" x2="9" y2="4.01"/><line x1="15" y1="4" x2="15" y2="4.01"/></Icon>;
 const UserIcon      = (p) => <Icon {...p}><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></Icon>;
 const CheckCircle   = (p) => <Icon {...p}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></Icon>;
-const EditIcon      = (p) => <Icon {...p}><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></Icon>;
 const VideoIcon     = (p) => <Icon {...p}><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></Icon>;
 
 /* ─────────────────────────────────────────────
@@ -703,7 +702,7 @@ function ReviewStep({ booking, format, onConfirm }) {
 }
 
 /* ── Appointment summary panel (desktop sticky, mobile inline) ── */
-function AppointmentSummary({ booking, format, currentStep }) {
+function AppointmentSummary({ booking, format }) {
   const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
   const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
@@ -1055,7 +1054,7 @@ function BookingStepsCarousel3D({
 
       {/* ── Step progress dots ── */}
       <div className="flex items-center justify-center gap-2" style={{ marginTop: 120, marginBottom: isMobile ? 27 : 0, position: "relative", zIndex: 10 }}>
-        {stepFlow.map((stepId, i) => {
+        {stepFlow.map((stepId) => {
           const active    = isActive(stepId);
           const complete  = isComplete(stepId);
           return (
@@ -1135,8 +1134,6 @@ export default function BookAppointmentPage({ onNavigate = () => {} }) {
   const handleProvider = (p)  => { setBooking(b => ({ ...b, provider: p  })); advance(); };
   const handleFormat   = (f)  => {
     setBooking(b => ({ ...b, format: f, location: null, date: null, time: null }));
-    // advance after format selected
-    const nextIdx = stepFlow.indexOf("format") + 1;
     if (f.id === "video") {
       // re-derive flow after this selection
       const newFlow = ["careType","provider","format","datetime","review"];

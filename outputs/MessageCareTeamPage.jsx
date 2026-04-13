@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Search, X, Send, Check, ChevronLeft } from "lucide-react";
-import vHealthLogo from "../assets/V-Health_logo.png";
+import vHealthLogo from "../assets/V-Health_Logo.png";
 
 /* ─────────────────────────────────────────────
    BACKGROUND ANIMATION  (matches other pages)

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Search, X, ChevronRight, Video, Send } from "lucide-react";
-import vHealthLogo from "../assets/V-Health_logo.png";
+import vHealthLogo from "../assets/V-Health_Logo.png";
 import mariaAvatar from "../assets/maria_avatar.png";
 
 /* ─────────────────────────────────────────────

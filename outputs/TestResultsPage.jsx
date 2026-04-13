@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Search, X, ChevronLeft, Check } from "lucide-react";
-import vHealthLogo from "../assets/V-Health_logo.png";
+import vHealthLogo from "../assets/V-Health_Logo.png";
 
 /* ─────────────────────────────────────────────
    BACKGROUND ANIMATION  (matches other pages)
@@ -789,7 +789,6 @@ function ResultDetailPanel({ result, onBack, onNavigate }) {
     );
   }
 
-  const statusCfg = resultStatusConfig[result.status] ?? resultStatusConfig["reviewed"];
   const isLab     = !!result.components;
   const isImaging = !!result.narrativeSummary;
 

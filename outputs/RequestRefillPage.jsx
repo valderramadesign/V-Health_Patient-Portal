@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import vHealthLogo from "../assets/V-Health_logo.png";
+import vHealthLogo from "../assets/V-Health_Logo.png";
 
 /* ─────────────────────────────────────────────
    BACKGROUND ANIMATION
