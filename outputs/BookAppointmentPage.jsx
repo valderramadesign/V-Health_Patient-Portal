@@ -205,7 +205,7 @@ const navRoutes = { home: "home", results: "test-results", messages: "messages",
 
 function DesktopNav({ onNavigate }) {
   return (
-    <nav aria-label="Main navigation" className="hidden lg:flex flex-col gap-1.5 py-6 px-4" style={{ width: 210 }}>
+    <nav aria-label="Main navigation" className="hidden lg:flex flex-col gap-1.5 pt-7 pb-6 px-4" style={{ width: 210 }}>
       {navItems.map((item) => {
         const IconComp = item.icon;
         const isActive = item.active;
@@ -1200,7 +1200,7 @@ export default function BookAppointmentPage({ onNavigate = () => {} }) {
         {/* Desktop sidebar — position:relative + zIndex:2 so it paints on top
              of any 3D carousel cards that bleed into this area */}
         <aside className="hidden lg:block flex-shrink-0"
-          style={{ borderRight:"1px solid rgba(255,255,255,0.6)", background: colors.bgPage, position:"relative", zIndex:2 }}>
+          style={{ borderRight:"1px solid rgba(255,255,255,0.6)", position:"relative", zIndex:2 }}>
           <DesktopNav onNavigate={onNavigate} />
         </aside>
 
