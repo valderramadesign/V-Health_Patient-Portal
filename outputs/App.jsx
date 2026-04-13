@@ -3,6 +3,7 @@ import PatientPortalHome    from "./PatientPortalHome";
 import BookAppointmentPage  from "./BookAppointmentPage";
 import MessageCareTeamPage  from "./MessageCareTeamPage";
 import TestResultsPage      from "./TestResultsPage";
+import RequestRefillPage    from "./RequestRefillPage";
 
 /*
   App.jsx — top-level client-side router.
@@ -12,6 +13,7 @@ import TestResultsPage      from "./TestResultsPage";
     "book-appointment"  → BookAppointmentPage
     "messages"          → MessageCareTeamPage
     "test-results"      → TestResultsPage
+    "refill-request"    → RequestRefillPage
 
   To add more pages later, extend the `pages` map and add
   corresponding entries to the navigation route maps in each page file.
@@ -22,6 +24,7 @@ const pages = {
   "book-appointment": BookAppointmentPage,
   "messages":         MessageCareTeamPage,
   "test-results":     TestResultsPage,
+  "refill-request":   RequestRefillPage,
 };
 
 export default function App() {

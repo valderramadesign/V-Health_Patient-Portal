@@ -875,10 +875,10 @@ function BookingStepsCarousel3D({
   const cardRefs = useRef([]);
   const [activeCardHeight, setActiveCardHeight] = useState(680);
 
-  // Stage height sized so the perspective-projected card bottom lands exactly
-  // at the stage boundary on both mobile and desktop — no blank CSS gap below
-  // the visual card edge before the step dots.
-  const STAGE_H    = Math.round(2 * stageScale * (140 + activeCardHeight) / (1 + stageScale));
+  // Stage height calculated exactly so the perspective-projected card bottom lands
+  // exactly at the stage boundary on both mobile and desktop.
+  // Using a fixed perspectiveOrigin Y (140px) prevents the top from shifting.
+  const STAGE_H    = Math.round(140 + activeCardHeight * stageScale);
 
   // Track the rotation as a running accumulator so transitions always go the
   // short way round and we never "wrap" through 360°.
@@ -955,7 +955,7 @@ function BookingStepsCarousel3D({
       <div style={{
         height: STAGE_H,
         perspective: PERSP,
-        perspectiveOrigin: "50% 50%",
+        perspectiveOrigin: "50% 140px",
         overflow: "visible",
         position: "relative",
       }}>
@@ -982,7 +982,6 @@ function BookingStepsCarousel3D({
                   position: "absolute",
                   width:    CARD_W,
                   height:   "auto",
-                  minHeight: isMobile ? 680 / stageScale : 680,
                   left:     `calc(50% - ${CARD_W / 2}px)`,
                   top:      0,
                   transform: `rotateY(${i * ANGLE}deg) translateZ(${RADIUS}px) scale(${active ? 1 : 0.85})`,
@@ -1077,7 +1076,7 @@ function BookingStepsCarousel3D({
       </div>
 
       {/* ── Step progress dots ── */}
-      <div className="flex items-center justify-center gap-2" style={{ marginTop: 8, marginBottom: isMobile ? 27 : 0, position: "relative", zIndex: 10 }}>
+      <div className="flex items-center justify-center gap-2" style={{ marginTop: 10, marginBottom: isMobile ? 27 : 0, position: "relative", zIndex: 10 }}>
         {stepFlow.map((stepId, i) => {
           const active    = isActive(stepId);
           const complete  = isComplete(stepId);

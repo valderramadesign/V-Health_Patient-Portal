@@ -59,6 +59,8 @@ const colors = {
   error:        "#E8887D",
   purple:       "#7C6FD8",
   purpleBg:     "#F3F1FE",
+  orange:       "#F97316",
+  orangeBg:     "#FFF7ED",
 };
 
 const glass = {
@@ -229,14 +231,14 @@ const careTeams = [
    NAV DATA
    ───────────────────────────────────────────── */
 const navItems = [
-  { icon: HomeIcon,      label: "Home",            id: "home",         active: false },
-  { icon: CalendarIcon,  label: "Appointments",    id: "appointments", active: false },
-  { icon: ClipboardIcon, label: "Test Results",    id: "results",      active: false },
-  { icon: PillIcon,      label: "Request Refills", id: "refills",      active: false },
-  { icon: MessageIcon,   label: "Messages",        id: "messages",     active: true, badge: 2 },
+  { icon: HomeIcon,      label: "Home",            id: "home",         active: false, color: colors.orange,  bg: colors.orangeBg  },
+  { icon: CalendarIcon,  label: "Appointments",    id: "appointments", active: false, color: colors.primary, bg: colors.skyTint   },
+  { icon: ClipboardIcon, label: "Test Results",    id: "results",      active: false, color: colors.purple,  bg: colors.purpleBg  },
+  { icon: PillIcon,      label: "Request Refills", id: "refills",      active: false, color: colors.warning, bg: colors.warningBg },
+  { icon: MessageIcon,   label: "Messages",        id: "messages",     active: true,  color: colors.success, bg: colors.successBg, badge: 2 },
 ];
 
-const navRoutes = { home: "home", appointments: "book-appointment", results: "test-results" };
+const navRoutes = { home: "home", appointments: "book-appointment", results: "test-results", refills: "refill-request" };
 
 /* ─────────────────────────────────────────────
    SHARED LAYOUT COMPONENTS  (match other pages)
@@ -281,20 +283,20 @@ function DesktopNav({ onNavigate }) {
         return (
           <a key={item.id} href={`#${item.id}`} aria-current={isActive ? "page" : undefined}
             onClick={navRoutes[item.id] ? (e) => { e.preventDefault(); onNavigate(navRoutes[item.id]); } : undefined}
-            className="relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150 focus:outline-none focus-visible:ring-2"
+            className="relative flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2"
             style={{
-              color: isActive ? colors.primary : colors.textMuted,
-              background: isActive ? glassSelected.background : glass.background,
-              border:     isActive ? glassSelected.border     : glass.border,
-              boxShadow:  isActive ? glassSelected.boxShadow  : glass.boxShadow,
+              color: colors.textDark,
+              background: isActive ? item.bg : glass.background,
+              border: isActive ? `1px solid ${item.color}35` : glass.border,
+              boxShadow: isActive ? `0 2px 8px ${item.color}20, ${glass.boxShadow}` : glass.boxShadow,
               backdropFilter: glass.backdropFilter, WebkitBackdropFilter: glass.WebkitBackdropFilter,
             }}
-            onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.background=glassHover.background; e.currentTarget.style.boxShadow=glassHover.boxShadow; }}}
-            onMouseLeave={(e) => { if (!isActive) { e.currentTarget.style.background=glass.background; e.currentTarget.style.boxShadow=glass.boxShadow; }}}
+            onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.background=glassHover.background; e.currentTarget.style.boxShadow=glassHover.boxShadow; e.currentTarget.style.border=`1px solid rgba(255,255,255,0.95)`; }}}
+            onMouseLeave={(e) => { if (!isActive) { e.currentTarget.style.background=glass.background; e.currentTarget.style.boxShadow=glass.boxShadow; e.currentTarget.style.border=glass.border; }}}
           >
-            <span className="flex items-center justify-center rounded-lg flex-shrink-0"
-              style={{ width:30, height:30, background: isActive ? "rgba(42,157,255,0.15)" : "rgba(255,255,255,0.5)", color: isActive ? colors.primary : colors.textMuted }}>
-              <IconComp size={17} />
+            <span className="flex items-center justify-center rounded-xl flex-shrink-0"
+              style={{ width:40, height:40, background: item.bg, color: item.color }}>
+              <IconComp size={20} />
             </span>
             <span>{item.label}</span>
             {item.badge && (
@@ -324,9 +326,9 @@ function MobileNav({ onNavigate }) {
           <a key={item.id} href={`#${item.id}`} aria-current={isActive ? "page" : undefined}
             onClick={navRoutes[item.id] ? (e) => { e.preventDefault(); onNavigate(navRoutes[item.id]); } : undefined}
             className="relative flex flex-col items-center justify-center gap-0.5 py-2.5 px-2 flex-1 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset"
-            style={{ color: isActive ? colors.primary : colors.textMuted, minHeight: 56 }}>
+            style={{ color: isActive ? item.color : colors.textMuted, minHeight: 56 }}>
             {isActive && <span className="absolute top-0 left-1/2 -translate-x-1/2 rounded-b-full"
-              style={{ width:24, height:3, background:colors.primary }} aria-hidden="true" />}
+              style={{ width:24, height:3, background:item.color }} aria-hidden="true" />}
             <span className="relative">
               <IconComp size={20} />
               {item.badge && <span className="absolute -top-1 -right-1.5 flex items-center justify-center rounded-full text-white"
@@ -1159,7 +1161,7 @@ export default function MessageCareTeamPage({ onNavigate = () => {} }) {
       </header>
 
       {/* ── BODY ── */}
-      <div className="flex flex-1 max-w-screen-xl mx-auto w-full" style={{ minHeight: 0 }}>
+      <div className="flex flex-1 max-w-screen-xl mx-auto w-full">
 
         {/* Desktop sidebar */}
         <aside className="hidden lg:block flex-shrink-0"

@@ -104,11 +104,6 @@ const glassHover = {
   boxShadow:    "inset 0 2px 4px rgba(0,0,0,0.04), inset 0 0 0 0.5px rgba(255,255,255,0.6), 0 4px 16px rgba(0,0,0,0.08)",
 };
 
-const glassActive = {
-  background:   "rgba(42,157,255,0.10)",
-  border:       `1px solid rgba(42,157,255,0.35)`,
-  boxShadow:    "inset 0 2px 4px rgba(42,157,255,0.08), inset 0 0 0 0.5px rgba(255,255,255,0.4), 0 0.5px 0 rgba(255,255,255,0.5)",
-};
 
 /* ─────────────────────────────────────────────
    ICON COMPONENTS
@@ -148,6 +143,12 @@ const updates = [
   { id: "refill",  icon: PillIcon,      accent: colors.warning, accentBg: colors.warningBg, label: "Refill reminder",      title: "Your prescription is ready to renew",  detail: "Lisinopril 10 mg · Refill by April 12", action: "Renew prescription", tag: null },
 ];
 
+const quickActions = [
+  { icon: CalendarIcon,  label: "Book appointment",   color: colors.primary, bg: colors.skyTint,   route: "book-appointment" },
+  { icon: ClipboardIcon, label: "View results",       color: colors.purple,  bg: colors.purpleBg,  route: "test-results" },
+  { icon: PillIcon,      label: "Renew prescription", color: colors.warning, bg: colors.warningBg, route: null },
+  { icon: MessageIcon,   label: "Message care team",  color: colors.success, bg: colors.successBg, route: "messages" },
+];
 
 const navItems = [
   { icon: HomeIcon,      label: "Home",            id: "home",         active: true,  color: colors.orange,  bg: colors.orangeBg  },
@@ -222,76 +223,7 @@ function Avatar({ size = 40 }) {
   );
 }
 
-/* ── Desktop sidebar nav (glass nav items) ── */
-const navRoutes = { appointments: "book-appointment", messages: "messages", results: "test-results" };
-
-function DesktopNav({ onNavigate }) {
-  return (
-    <nav
-      aria-label="Main navigation"
-      className="hidden lg:flex flex-col gap-1.5 py-6 px-4"
-      style={{ width: 210 }}
-    >
-      {navItems.map((item) => {
-        const IconComp = item.icon;
-        const isActive = item.active;
-
-        return (
-          <a
-            key={item.id}
-            href={`#${item.id}`}
-            aria-current={isActive ? "page" : undefined}
-            onClick={navRoutes[item.id] ? (e) => { e.preventDefault(); onNavigate(navRoutes[item.id]); } : undefined}
-            className="relative flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2"
-            style={{
-              color: colors.textDark,
-              background: glass.background,
-              border: isActive ? `1px solid ${item.color}35` : glass.border,
-              boxShadow: isActive ? `0 2px 8px ${item.color}20, ${glass.boxShadow}` : glass.boxShadow,
-              backdropFilter: glass.backdropFilter,
-              WebkitBackdropFilter: glass.WebkitBackdropFilter,
-            }}
-            onMouseEnter={(e) => {
-              if (!isActive) {
-                e.currentTarget.style.background = glassHover.background;
-                e.currentTarget.style.boxShadow  = glassHover.boxShadow;
-                e.currentTarget.style.border      = `1px solid rgba(255,255,255,0.95)`;
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isActive) {
-                e.currentTarget.style.background = glass.background;
-                e.currentTarget.style.boxShadow  = glass.boxShadow;
-                e.currentTarget.style.border      = glass.border;
-              }
-            }}
-          >
-            <span
-              className="flex items-center justify-center rounded-xl flex-shrink-0"
-              style={{
-                width: 40, height: 40,
-                background: item.bg,
-                color: item.color,
-              }}
-            >
-              <IconComp size={20} />
-            </span>
-            <span>{item.label}</span>
-            {item.badge && (
-              <span
-                className="ml-auto flex items-center justify-center rounded-full text-white font-semibold"
-                style={{ width: 19, height: 19, fontSize: 10, background: colors.error }}
-                aria-label={`${item.badge} unread`}
-              >
-                {item.badge}
-              </span>
-            )}
-          </a>
-        );
-      })}
-    </nav>
-  );
-}
+const navRoutes = { appointments: "book-appointment", messages: "messages", results: "test-results", refills: "refill-request" };
 
 /* ── Mobile bottom navigation (glass) ── */
 function MobileNav({ onNavigate }) {
@@ -457,6 +389,50 @@ function UpdateCard({ item }) {
         </div>
       </div>
     </article>
+  );
+}
+
+/* ── Quick actions grid (glass cards) ── */
+function QuickActions({ onNavigate }) {
+  return (
+    <section aria-label="Quick actions">
+      <h2 className="sr-only">Quick actions</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {quickActions.map((qa) => {
+          const IconComp = qa.icon;
+          return (
+            <button
+              key={qa.label}
+              onClick={() => qa.route && onNavigate(qa.route)}
+              className="group flex flex-col items-center justify-center gap-2.5 rounded-2xl py-5 px-3 transition-all duration-200 focus:outline-none focus-visible:ring-2"
+              style={{
+                ...glass,
+                color: colors.textDark,
+                cursor: qa.route ? "pointer" : "default",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = glassHover.background;
+                e.currentTarget.style.boxShadow  = glassHover.boxShadow;
+                e.currentTarget.style.border      = `1px solid rgba(255,255,255,0.95)`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = glass.background;
+                e.currentTarget.style.boxShadow  = glass.boxShadow;
+                e.currentTarget.style.border      = glass.border;
+              }}
+            >
+              <span
+                className="flex items-center justify-center rounded-xl"
+                style={{ width: 44, height: 44, background: qa.bg, color: qa.color }}
+              >
+                <IconComp size={22} />
+              </span>
+              <span className="text-sm font-medium text-center leading-tight">{qa.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </section>
   );
 }
 
@@ -711,20 +687,9 @@ export default function PatientPortalHome({ onNavigate = () => {} }) {
       {/* ── BODY ── */}
       <div className="flex flex-1 max-w-screen-xl mx-auto w-full">
 
-        {/* Desktop sidebar (glass panel) */}
-        <aside
-          className="hidden lg:block flex-shrink-0"
-          style={{
-            borderRight: "1px solid rgba(255,255,255,0.6)",
-            background: "rgba(255,255,255,0.3)",
-          }}
-        >
-          <DesktopNav onNavigate={onNavigate} />
-        </aside>
-
         {/* Main content */}
         <main
-          className="flex-1 px-5 lg:px-10 py-8 lg:py-10 pb-28 lg:pb-10"
+          className="flex-1 px-5 lg:px-8 pt-7 pb-28 lg:pb-8"
           style={{ maxWidth: 820, margin: "0 auto" }}
         >
           <div className="flex flex-col gap-8 lg:gap-10">
@@ -763,6 +728,7 @@ export default function PatientPortalHome({ onNavigate = () => {} }) {
               </a>
             </div>
 
+            <QuickActions onNavigate={onNavigate} />
             <LatestUpdates />
 
           </div>
