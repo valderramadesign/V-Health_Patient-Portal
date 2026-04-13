@@ -1265,7 +1265,7 @@ export default function BookAppointmentPage({ onNavigate = () => {} }) {
                 </div>
 
                 {/* ── Right panel (desktop) ── */}
-                <div className="hidden lg:block flex-shrink-0" style={{ width: 280, position:"sticky", top:96, marginTop: 55 }}>
+                <div className="hidden lg:block flex-shrink-0" style={{ width: 280, position:"sticky", top:96, marginTop: 54 }}>
                   <div className="flex flex-col gap-4">
                     <AppointmentSummary booking={booking} format={booking.format} currentStep={currentStep} />
                     <SupportSection />
