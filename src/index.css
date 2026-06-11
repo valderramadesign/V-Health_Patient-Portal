@@ -29,12 +29,6 @@ body {
   font-family: Aptos, 'Avenir Next', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
-/* ── Focus ring ──────────────────────────────── */
-:focus-visible {
-  outline: 2px solid #2A9DFF;
-  outline-offset: 2px;
-}
-
 /* ── Scrollbar ───────────────────────────────── */
 ::-webkit-scrollbar {
   width: 6px;
@@ -53,7 +47,7 @@ body {
 
 /* ── Selection ───────────────────────────────── */
 ::selection {
-  background-color: rgba(42, 157, 255, 0.18);
+  background-color: rgba(0, 122, 114, 0.18);
   color: inherit;
 }
 

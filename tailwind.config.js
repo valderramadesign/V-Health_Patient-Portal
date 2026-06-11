@@ -6,7 +6,14 @@ export default {
     "./outputs/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      ringColor: {
+        DEFAULT: "rgba(0,122,114,0.35)",
+      },
+      ringOffsetColor: {
+        DEFAULT: "#FFFFFF",
+      },
+    },
   },
   plugins: [],
 };

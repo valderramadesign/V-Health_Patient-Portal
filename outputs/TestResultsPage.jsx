@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Search, X, ChevronLeft, Check } from "lucide-react";
-import vHealthLogo from "../assets/V-Health_Logo.png";
+import sutterHealthLogo from "../assets/sutter_health_TransparentLogo.png";
 
 /* ─────────────────────────────────────────────
    BACKGROUND ANIMATION  (matches other pages)
@@ -15,18 +15,19 @@ function BgradientAnim({ animationDuration = 8 }) {
         @property --hue2 { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
         .oklch-gradient-bg {
           background-image:
-            linear-gradient(in oklch longer hue to right,
-              oklch(0.95 0.07 var(--hue1) / 60%),
-              oklch(0.92 0.08 var(--hue2) / 60%)),
-            linear-gradient(in oklch longer hue to bottom,
-              oklch(0.95 0.07 var(--hue1) / 60%),
-              oklch(0.92 0.08 var(--hue2) / 60%));
+            linear-gradient(in oklch shorter hue to right,
+              oklch(0.985 0.012 var(--hue1) / 50%),
+              oklch(0.97 0.018 var(--hue2) / 50%)),
+            linear-gradient(in oklch shorter hue to bottom,
+              oklch(0.985 0.012 var(--hue1) / 50%),
+              oklch(0.97 0.018 var(--hue2) / 50%));
           background-size: 100% 100%;
           animation: anim_bg ${animationDuration}s linear infinite;
         }
         @keyframes anim_bg {
-          0%   { --hue1: 30deg;  --hue2: 180deg; }
-          100% { --hue1: 390deg; --hue2: 540deg; }
+          0%   { --hue1: 130deg; --hue2: 160deg; }
+          50%  { --hue1: 160deg; --hue2: 130deg; }
+          100% { --hue1: 130deg; --hue2: 160deg; }
         }
       `;
       document.head.appendChild(styleEl);
@@ -44,24 +45,24 @@ function BgradientAnim({ animationDuration = 8 }) {
    DESIGN TOKENS  (identical to other pages)
    ───────────────────────────────────────────── */
 const colors = {
-  primary:      "#2A9DFF",
-  primaryDark:  "#1B8AE8",
-  skyTint:      "#EAF6FF",
-  bgPage:       "#ECEEF2",
+  primary:      "#007A72",
+  primaryDark:  "#004D4D",
+  skyTint:      "#CCFCF9",
+  bgPage:       "#EBF1F0",
   white:        "#FFFFFF",
-  cloudGray:    "#F4F5F7",
-  borderGray:   "#E4E7EC",
-  textMuted:    "#6B7280",
-  textDark:     "#1F2A37",
+  cloudGray:    "#F2F5F4",
+  borderGray:   "#DFE8E6",
+  textMuted:    "#5F6E6C",
+  textDark:     "#192A29",
   success:      "#67C59A",
   successBg:    "#EEFBF3",
   warning:      "#F4C46A",
   warningBg:    "#FFF9ED",
   error:        "#E8887D",
-  purple:       "#7C6FD8",
-  purpleBg:     "#F3F1FE",
-  orange:       "#F97316",
-  orangeBg:     "#FFF7ED",
+  purple:       "#004D4D",
+  purpleBg:     "#DCF1EE",
+  orange:       "#00A499",
+  orangeBg:     "#D6F6F3",
 };
 
 const glass = {
@@ -76,9 +77,9 @@ const glassHover = {
   boxShadow:  "inset 0 2px 4px rgba(0,0,0,0.04), inset 0 0 0 0.5px rgba(255,255,255,0.6), 0 4px 16px rgba(0,0,0,0.08)",
 };
 const glassSelected = {
-  background: "rgba(42,157,255,0.10)",
-  border:     "1px solid rgba(42,157,255,0.40)",
-  boxShadow:  "inset 0 2px 4px rgba(42,157,255,0.08), 0 0 0 2px rgba(42,157,255,0.15)",
+  background: "rgba(0,122,114,0.10)",
+  border:     "1px solid rgba(0,122,114,0.40)",
+  boxShadow:  "inset 0 2px 4px rgba(0,122,114,0.08), 0 0 0 2px rgba(0,122,114,0.15)",
 };
 
 /* ─────────────────────────────────────────────
@@ -262,12 +263,8 @@ const navRoutes = {
    ───────────────────────────────────────────── */
 function Logo() {
   return (
-    <div className="flex items-center gap-2.5 select-none">
-      <img src={vHealthLogo} alt="V-Health Logo" className="flex-shrink-0" style={{ width: 36, height: 36, objectFit: "contain" }} />
-      <div className="flex flex-col leading-tight">
-        <span className="font-semibold text-sm tracking-wide" style={{ color: colors.textDark }}>VALDERRAMA</span>
-        <span className="text-xs tracking-widest -mt-0.5" style={{ color: colors.textMuted }}>HEALTH</span>
-      </div>
+    <div className="flex items-center select-none">
+      <img src={sutterHealthLogo} alt="Sutter Health Logo" className="flex-shrink-0" style={{ height: 36, objectFit: "contain", position: "relative", top: "6px" }} />
     </div>
   );
 }
@@ -276,12 +273,12 @@ function PageSearchBar() {
   return (
     <div className="relative w-full">
       <label htmlFor="portal-search-results" className="sr-only">Search</label>
-      <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
-        style={{ color:colors.textMuted }} aria-hidden="true" />
+      <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-[#5F6E6C] peer-focus:text-[#00A9A0] transition-colors"
+        aria-hidden="true" />
       <input id="portal-search-results" type="search" placeholder="Search appointments, results, messages…"
-        className="w-full rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none transition-all"
+        className="peer w-full rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none transition-all"
         style={{ ...glass, color:colors.textDark, fontFamily:"inherit" }}
-        onFocus={(e)=>{ e.target.style.background="rgba(255,255,255,0.85)"; e.target.style.border=`1px solid ${colors.primary}`; e.target.style.boxShadow=`0 0 0 3px ${colors.skyTint}, inset 0 1px 2px rgba(0,0,0,0.04)`; }}
+        onFocus={(e)=>{ e.target.style.background="rgba(255,255,255,0.85)"; e.target.style.border = `1px solid rgba(0,122,114,0.35)`; e.target.style.boxShadow = `inset 0 1px 2px rgba(0,0,0,0.04)`; }}
         onBlur={(e) =>{ e.target.style.background=glass.background; e.target.style.border=glass.border; e.target.style.boxShadow=glass.boxShadow; }}
       />
     </div>
@@ -300,22 +297,22 @@ function DesktopNav({ onNavigate }) {
             className="relative flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2"
             style={{
               color: colors.textDark,
-              background: isActive ? item.bg : glass.background,
-              border: isActive ? `1px solid ${item.color}35` : glass.border,
-              boxShadow: isActive ? `0 2px 8px ${item.color}20, ${glass.boxShadow}` : glass.boxShadow,
+              background: isActive ? "#FFFFFF" : glass.background,
+              border: isActive ? "1px solid rgba(0,122,114,0.35)" : glass.border,
+              boxShadow: glass.boxShadow,
               backdropFilter: glass.backdropFilter, WebkitBackdropFilter: glass.WebkitBackdropFilter,
             }}
             onMouseEnter={(e)=>{ if (!isActive) { e.currentTarget.style.background=glassHover.background; e.currentTarget.style.boxShadow=glassHover.boxShadow; e.currentTarget.style.border=`1px solid rgba(255,255,255,0.95)`; }}}
             onMouseLeave={(e)=>{ if (!isActive) { e.currentTarget.style.background=glass.background; e.currentTarget.style.boxShadow=glass.boxShadow; e.currentTarget.style.border=glass.border; }}}
           >
             <span className="flex items-center justify-center rounded-xl flex-shrink-0"
-              style={{ width:40, height:40, background: item.bg, color: item.color }}>
+              style={{ width:40, height:40, background: isActive ? "#00A9A0" : "#FFFFFF", color: isActive ? "#FFFFFF" : "#00A9A0" }}>
               <IconComp size={20} />
             </span>
             <span>{item.label}</span>
             {item.badge && (
               <span className="ml-auto flex items-center justify-center rounded-full text-white font-semibold"
-                style={{ width:19, height:19, fontSize:10, background:colors.error }} aria-label={`${item.badge} unread`}>
+                style={{ width:19, height:19, fontSize:10, background: "#E5302B" }} aria-label={`${item.badge} unread`}>
                 {item.badge}
               </span>
             )}
@@ -346,7 +343,7 @@ function MobileNav({ onNavigate }) {
             <span className="relative">
               <IconComp size={20} />
               {item.badge && <span className="absolute -top-1 -right-1.5 flex items-center justify-center rounded-full text-white"
-                style={{ width:15, height:15, fontSize:9, fontWeight:600, background:colors.error }}
+                style={{ width:15, height:15, fontSize:9, fontWeight:600, background: "#E5302B" }}
                 aria-label={`${item.badge} unread`}>{item.badge}</span>}
             </span>
             <span className="font-medium leading-tight" style={{ fontSize:10 }}>{item.label}</span>
@@ -373,7 +370,7 @@ function AIAssistant() {
       {!open && (
         <button onClick={() => setOpen(true)} aria-label="Open assistant — Ask for help"
           className="fixed z-50 flex items-center gap-2 rounded-full px-5 py-3 text-white font-medium text-sm shadow-lg transition-all duration-200 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
-          style={{ background:`linear-gradient(135deg, ${colors.primary}, #5BB8FF)`,
+          style={{ background:`linear-gradient(135deg, ${colors.primary}, #00A499)`,
             bottom:"calc(env(safe-area-inset-bottom, 8px) + 80px)", right:24 }}>
           <SparkleIcon size={18} /><span className="hidden sm:inline">Ask for help</span>
         </button>
@@ -389,7 +386,7 @@ function AIAssistant() {
           <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom:"1px solid rgba(255,255,255,0.6)" }}>
             <div className="flex items-center gap-2.5">
               <span className="flex items-center justify-center rounded-xl"
-                style={{ width:34, height:34, background:`linear-gradient(135deg, ${colors.primary}, #5BB8FF)` }}>
+                style={{ width:34, height:34, background:`linear-gradient(135deg, ${colors.primary}, #00A499)` }}>
                 <SparkleIcon size={17} className="text-white" />
               </span>
               <div>
@@ -418,7 +415,7 @@ function AIAssistant() {
                 <button key={s} onClick={() => setQuery(s)}
                   className="text-left text-sm rounded-xl px-3.5 py-2.5 transition-all focus:outline-none"
                   style={{ background:"rgba(255,255,255,0.45)", border:"1px solid rgba(255,255,255,0.8)", color:colors.textDark }}
-                  onMouseEnter={(e)=>{ e.currentTarget.style.background="rgba(42,157,255,0.08)"; e.currentTarget.style.color=colors.primary; }}
+                  onMouseEnter={(e)=>{ e.currentTarget.style.background="rgba(0,122,114,0.08)"; e.currentTarget.style.color=colors.primary; }}
                   onMouseLeave={(e)=>{ e.currentTarget.style.background="rgba(255,255,255,0.45)"; e.currentTarget.style.color=colors.textDark; }}>
                   {s}
                 </button>
@@ -436,7 +433,14 @@ function AIAssistant() {
               style={{ background:"rgba(255,255,255,0.45)", border:"1px solid rgba(255,255,255,0.8)", color:colors.textDark }} />
             <button aria-label="Send"
               className="flex items-center justify-center rounded-xl p-2"
-              style={{ background:query ? colors.primary:"rgba(255,255,255,0.45)", color:query ? "#fff":colors.textMuted }}>
+              style={{
+                background: query ? "rgba(0,122,114,0.1)" : "rgba(255,255,255,0.45)",
+                color: query ? colors.primary : colors.textMuted,
+                border: query ? "1px solid rgba(0,122,114,0.3)" : "none",
+                boxShadow: query ? "inset 0 1px 2px rgba(0,122,114,0.06)" : "none",
+              }}
+              onMouseEnter={(e) => { if (query) e.currentTarget.style.background = "rgba(0,122,114,0.18)"; }}
+              onMouseLeave={(e) => { if (query) e.currentTarget.style.background = "rgba(0,122,114,0.1)"; }}>
               <SendIcon size={16} />
             </button>
           </div>
@@ -450,79 +454,84 @@ function AIAssistant() {
    RESULTS LIST COMPONENTS
    ───────────────────────────────────────────── */
 
-function StatusBadge({ status }) {
-  const cfg = resultStatusConfig[status] ?? resultStatusConfig["reviewed"];
+// Pill badge — shape/size from the "Latest updates" tags on the Home page.
+const pillTones = {
+  green: { color: colors.primary, bg: `${colors.primary}15`, border: `${colors.primary}30` },
+  orange:{ color: "#C85500",      bg: "rgba(200,85,0,0.10)", border: "rgba(200,85,0,0.25)" },
+  grey:  { color: colors.textMuted, bg: "rgba(0,0,0,0.04)",  border: "rgba(0,0,0,0.10)" },
+};
+function PillBadge({ children, tone = "green" }) {
+  const t = pillTones[tone] ?? pillTones.green;
   return (
-    <span className="inline-flex items-center text-xs font-semibold rounded-full px-2.5 py-1"
-      style={{ background: cfg.bg, color: cfg.color }}>
-      {status === "outside-range" && <AlertIcon size={10} style={{ marginRight: 3, flexShrink: 0 }} />}
-      {status === "normal" && <Check size={10} strokeWidth={3} style={{ marginRight: 3, flexShrink: 0 }} />}
-      {cfg.label}
+    <span className="inline-flex items-center rounded-full px-2 py-0.5 font-semibold flex-shrink-0"
+      style={{ background: t.bg, border: `1px solid ${t.border}`, color: t.color, fontSize: 11 }}>
+      {children}
     </span>
   );
 }
 
+function StatusBadge({ status }) {
+  const cfg = resultStatusConfig[status] ?? resultStatusConfig["reviewed"];
+  const tone = status === "outside-range" ? "orange" : "green";
+  return <PillBadge tone={tone}>{cfg.label}</PillBadge>;
+}
+
 function CategoryChip({ category }) {
-  const iconMap = { Lab: FlaskIcon, Imaging: ImageIcon };
-  const IconComp = iconMap[category] ?? ClipboardIcon;
-  return (
-    <span className="inline-flex items-center gap-1 text-xs rounded-full px-2 py-0.5"
-      style={{ background: "rgba(255,255,255,0.5)", color: colors.textMuted,
-        border: "1px solid rgba(255,255,255,0.8)" }}>
-      <IconComp size={10} /> {category}
-    </span>
-  );
+  return <PillBadge tone="grey">{category}</PillBadge>;
 }
 
 function ResultCard({ result, isSelected, onClick }) {
   const [hovered, setHovered] = useState(false);
+  const iconMap = { Lab: FlaskIcon, Imaging: ImageIcon };
+  const IconComp = iconMap[result.category] ?? ClipboardIcon;
   return (
     <button
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="w-full text-left px-4 py-4 transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset"
+      className="group w-full text-left flex items-start gap-4 rounded-2xl p-5 transition-all duration-200 focus:outline-none focus-visible:ring-2"
       style={{
-        background: isSelected
-          ? "rgba(42,157,255,0.08)"
-          : hovered ? "rgba(255,255,255,0.45)" : "transparent",
-        borderBottom: "1px solid rgba(255,255,255,0.4)",
-        borderLeft: isSelected ? `3px solid ${colors.primary}` : "3px solid transparent",
+        ...glass,
+        background: isSelected ? "rgba(0,122,114,0.08)" : hovered ? glassHover.background : glass.background,
+        boxShadow:  isSelected ? glass.boxShadow : hovered ? glassHover.boxShadow : glass.boxShadow,
+        border:     isSelected ? "1px solid rgba(0,122,114,0.35)" : glass.border,
       }}
       aria-current={isSelected ? "true" : undefined}
       aria-label={`${result.isNew ? "New: " : ""}${result.name} — ${result.status}`}
     >
-      {/* Top row: name + status */}
-      <div className="flex items-start justify-between gap-2 mb-1.5">
-        <span className="text-sm leading-snug"
-          style={{ color: isSelected ? colors.primary : colors.textDark,
-            fontWeight: result.isNew ? 700 : 500 }}>
-          {result.name}
-        </span>
-        <span className="flex-shrink-0 mt-0.5"><StatusBadge status={result.status} /></span>
+      {/* Icon */}
+      <span className="flex-shrink-0 flex items-center justify-center rounded-xl mt-0.5"
+        style={{ width: 44, height: 44, background: "#FFFFFF", color: "#00A9A0" }}>
+        <IconComp size={22} />
+      </span>
+
+      {/* Content */}
+      <div className="flex-1 min-w-0">
+        {/* Headline + category badge */}
+        <div className="flex items-center gap-2">
+          {result.isNew && (
+            <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" role="img" aria-label="New result"
+              style={{ background: colors.primary }} />
+          )}
+          <h3 className="font-normal uppercase tracking-wide leading-snug flex-1 min-w-0" style={{ color: colors.primary, fontSize: 13 }}>
+            {result.name}
+          </h3>
+          <CategoryChip category={result.category} />
+        </div>
+
+        {/* Description + status badge */}
+        <div className="flex items-start justify-between gap-2 mt-1">
+          <p className="text-sm leading-snug min-w-0" style={{ color: colors.textDark }}>
+            {result.shortPreview}
+          </p>
+          <StatusBadge status={result.status} />
+        </div>
+
+        {/* Clinician + date */}
+        <p className="text-xs mt-2" style={{ color: colors.textMuted }}>
+          {result.clinician} · {result.collectionDate}
+        </p>
       </div>
-
-      {/* Meta row */}
-      <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-        <CategoryChip category={result.category} />
-        <span className="text-xs" style={{ color: colors.textMuted }}>
-          {result.collectionDate}
-        </span>
-        {result.isNew && (
-          <span className="w-2 h-2 rounded-full flex-shrink-0" role="img" aria-label="New result"
-            style={{ background: colors.primary }} />
-        )}
-      </div>
-
-      {/* Preview */}
-      <p className="text-xs leading-snug truncate" style={{ color: colors.textMuted }}>
-        {result.shortPreview}
-      </p>
-
-      {/* Clinician */}
-      <p className="text-xs mt-1" style={{ color: colors.textMuted }}>
-        {result.clinician}
-      </p>
     </button>
   );
 }
@@ -533,9 +542,9 @@ function ResultsSummaryBar({ results }) {
   const outOfRange  = results.filter((r) => r.status === "outside-range").length;
 
   const stats = [
-    { label: "Total results",  value: total,      color: colors.primary  },
-    { label: "New",            value: newCount,   color: colors.success  },
-    { label: "Outside range",  value: outOfRange, color: colors.warning  },
+    { label: "Total results",  value: total,      color: "#00A9A0" },
+    { label: "New",            value: newCount,   color: "#00A9A0" },
+    { label: "Outside range",  value: outOfRange, color: "#00A9A0" },
   ];
 
   return (
@@ -588,7 +597,7 @@ function ResultsListPanel({
             onChange={(e) => onSearchChange(e.target.value)}
             className="w-full rounded-xl py-2 pl-9 pr-8 text-xs outline-none transition-all"
             style={{ ...glass, color: colors.textDark, fontFamily: "inherit" }}
-            onFocus={(e)=>{ e.target.style.background="rgba(255,255,255,0.85)"; e.target.style.border=`1px solid ${colors.primary}`; }}
+            onFocus={(e)=>{ e.target.style.background="rgba(255,255,255,0.85)"; e.target.style.border = `1px solid rgba(0,122,114,0.35)`; }}
             onBlur={(e) =>{ e.target.style.background=glass.background; e.target.style.border=glass.border; }}
           />
           {search && (
@@ -670,15 +679,17 @@ function ResultsListPanel({
             </p>
           </div>
         ) : (
-          results.map((result) => (
-            <div key={result.id} role="listitem">
-              <ResultCard
-                result={result}
-                isSelected={result.id === selectedId}
-                onClick={() => onSelect(result.id)}
-              />
-            </div>
-          ))
+          <div className="flex flex-col gap-3 px-4 py-4">
+            {results.map((result) => (
+              <div key={result.id} role="listitem">
+                <ResultCard
+                  result={result}
+                  isSelected={result.id === selectedId}
+                  onClick={() => onSelect(result.id)}
+                />
+              </div>
+            ))}
+          </div>
         )}
       </div>
 
@@ -776,8 +787,8 @@ function ResultDetailPanel({ result, onBack, onNavigate }) {
       <div className="flex flex-col items-center justify-center h-full py-16 px-6 text-center"
         role="region" aria-label="Result detail">
         <div className="flex items-center justify-center rounded-2xl mb-4"
-          style={{ width:56, height:56, background:"rgba(42,157,255,0.08)", border:"1px solid rgba(42,157,255,0.15)" }}>
-          <ClipboardIcon size={26} style={{ color: colors.primary }} />
+          style={{ width:56, height:56, background:"#FFFFFF", boxShadow: glass.boxShadow }}>
+          <ClipboardIcon size={26} style={{ color: "#00A9A0" }} />
         </div>
         <p className="font-semibold text-sm mb-1" style={{ color: colors.textDark }}>
           Select a result to review details
@@ -801,8 +812,8 @@ function ResultDetailPanel({ result, onBack, onNavigate }) {
         {/* Back — mobile only */}
         <button onClick={onBack} aria-label="Back to results list"
           className="lg:hidden flex items-center gap-1 text-xs font-medium rounded-lg px-2.5 py-2 mb-3 focus:outline-none focus-visible:ring-2 transition-all"
-          style={{ color: colors.primary, background: "rgba(42,157,255,0.08)",
-            border: "1px solid rgba(42,157,255,0.2)" }}>
+          style={{ color: colors.primary, background: "rgba(0,122,114,0.08)",
+            border: "1px solid rgba(0,122,114,0.2)" }}>
           <ChevronLeft size={14} /> Back to results
         </button>
 
@@ -810,7 +821,7 @@ function ResultDetailPanel({ result, onBack, onNavigate }) {
           {/* Category icon */}
           <div className="flex-shrink-0 flex items-center justify-center rounded-xl mt-0.5"
             style={{ width:40, height:40,
-              background: result.status === "outside-range" ? "rgba(200,85,0,0.1)" : "rgba(42,157,255,0.08)",
+              background: result.status === "outside-range" ? "rgba(200,85,0,0.1)" : "rgba(0,122,114,0.08)",
               color: result.status === "outside-range" ? "#C85500" : colors.primary }}>
             {isImaging ? <ImageIcon size={20} /> : <FlaskIcon size={20} />}
           </div>
@@ -923,7 +934,7 @@ function ResultDetailPanel({ result, onBack, onNavigate }) {
               Note from your care team
             </h3>
             <div className="rounded-2xl px-4 py-4"
-              style={{ background: "rgba(42,157,255,0.06)", border: "1px solid rgba(42,157,255,0.18)" }}>
+              style={{ background: "rgba(0,122,114,0.06)", border: "1px solid rgba(0,122,114,0.18)" }}>
               <div className="flex items-center gap-2 mb-2">
                 <UserIcon size={13} style={{ color: colors.primary }} />
                 <span className="text-xs font-semibold" style={{ color: colors.primary }}>
@@ -971,9 +982,15 @@ function ResultDetailPanel({ result, onBack, onNavigate }) {
         style={{ borderTop: "1px solid rgba(255,255,255,0.5)", background: "rgba(255,255,255,0.2)" }}>
         <button
           onClick={() => onNavigate("messages")}
-          className="flex items-center gap-2 text-sm font-semibold rounded-xl px-4 py-2.5 text-white transition-all focus:outline-none focus-visible:ring-2"
-          style={{ background: `linear-gradient(135deg, ${colors.primary}, #5BB8FF)`,
-            boxShadow: "0 2px 8px rgba(42,157,255,0.25)" }}>
+          className="flex items-center gap-2 text-sm font-semibold rounded-xl px-4 py-2.5 transition-all focus:outline-none focus-visible:ring-2"
+          style={{
+            color: colors.primary,
+            background: "rgba(0,122,114,0.1)",
+            border: "1px solid rgba(0,122,114,0.3)",
+            boxShadow: "inset 0 1px 2px rgba(0,122,114,0.06)",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(0,122,114,0.18)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(0,122,114,0.1)"; }}>
           <MessageIcon size={15} /> Message care team
         </button>
 
@@ -1097,7 +1114,7 @@ export default function TestResultsPage({ onNavigate = () => {} }) {
             onMouseLeave={(e)=>(e.currentTarget.style.background="rgba(255,255,255,0.4)")}>
             <BellIcon size={20} />
             <span className="absolute top-1 right-1 rounded-full"
-              style={{ width:8, height:8, background:colors.error, border:"1.5px solid rgba(255,255,255,0.8)" }}
+              style={{ width:8, height:8, background: "#E5302B", border:"1.5px solid rgba(255,255,255,0.8)" }}
               aria-label="New notifications" />
           </button>
         </div>
@@ -1131,7 +1148,7 @@ export default function TestResultsPage({ onNavigate = () => {} }) {
             {/* ── Left: Results list ── */}
             <div
               className={`${mobilePanel === "detail" ? "hidden lg:flex" : "flex"} flex-col w-full lg:w-96 flex-shrink-0 rounded-2xl overflow-hidden`}
-              style={{ ...glass, minHeight: 500 }}>
+              style={{ minHeight: 500 }}>
               <ResultsListPanel
                 results={filteredResults}
                 allResults={results}

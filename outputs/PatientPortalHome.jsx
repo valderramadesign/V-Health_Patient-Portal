@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Search, X, ChevronRight, Video, Send } from "lucide-react";
-import vHealthLogo from "../assets/V-Health_Logo.png";
+import sutterHealthLogo from "../assets/sutter_health_TransparentLogo.png";
 import mariaAvatar from "../assets/maria_avatar.png";
 
 /* ─────────────────────────────────────────────
@@ -25,21 +25,22 @@ function BgradientAnim({ animationDuration = 8 }) {
       .oklch-gradient-bg {
         background-image:
           linear-gradient(
-            in oklch longer hue to right,
-            oklch(0.95 0.07 var(--hue1) / 60%),
-            oklch(0.92 0.08 var(--hue2) / 60%)
+            in oklch shorter hue to right,
+            oklch(0.985 0.012 var(--hue1) / 50%),
+            oklch(0.97 0.018 var(--hue2) / 50%)
           ),
           linear-gradient(
-            in oklch longer hue to bottom,
-            oklch(0.95 0.07 var(--hue1) / 60%),
-            oklch(0.92 0.08 var(--hue2) / 60%)
+            in oklch shorter hue to bottom,
+            oklch(0.985 0.012 var(--hue1) / 50%),
+            oklch(0.97 0.018 var(--hue2) / 50%)
           );
         background-size: 100% 100%;
         animation: anim_bg ${animationDuration}s linear infinite;
       }
       @keyframes anim_bg {
-        0%   { --hue1: 30deg;  --hue2: 180deg; }
-        100% { --hue1: 390deg; --hue2: 540deg; }
+        0%   { --hue1: 130deg; --hue2: 160deg; }
+        50%  { --hue1: 160deg; --hue2: 130deg; }
+        100% { --hue1: 130deg; --hue2: 160deg; }
       }
     `;
     document.head.appendChild(styleEl);
@@ -67,25 +68,25 @@ function BgradientAnim({ animationDuration = 8 }) {
    DESIGN TOKENS
    ───────────────────────────────────────────── */
 const colors = {
-  primary:      "#2A9DFF",
-  primaryDark:  "#1B8AE8",
-  skyTint:      "#EAF6FF",
-  bgPage:       "#ECEEF2",
+  primary:      "#007A72",
+  primaryDark:  "#004D4D",
+  skyTint:      "#CCFCF9",
+  bgPage:       "#EBF1F0",
   white:        "#FFFFFF",
-  cloudGray:    "#F4F5F7",
-  borderGray:   "#E4E7EC",
-  textMuted:    "#6B7280",
-  textDark:     "#1F2A37",
+  cloudGray:    "#F2F5F4",
+  borderGray:   "#DFE8E6",
+  textMuted:    "#5F6E6C",
+  textDark:     "#192A29",
   success:      "#67C59A",
   successBg:    "#EEFBF3",
   warning:      "#F4C46A",
   warningBg:    "#FFF9ED",
   error:        "#E8887D",
   errorBg:      "#FEF2F0",
-  purple:       "#7C6FD8",
-  purpleBg:     "#F3F1FE",
-  orange:       "#F97316",
-  orangeBg:     "#FFF7ED",
+  purple:       "#004D4D",
+  purpleBg:     "#DCF1EE",
+  orange:       "#00A499",
+  orangeBg:     "#D6F6F3",
 };
 
 /*
@@ -166,12 +167,8 @@ const navItems = [
 /* ── Logo ── */
 function Logo() {
   return (
-    <div className="flex items-center gap-2.5 select-none">
-      <img src={vHealthLogo} alt="V-Health Logo" className="flex-shrink-0" style={{ width: 36, height: 36, objectFit: "contain" }} />
-      <div className="flex flex-col leading-tight">
-        <span className="font-semibold text-sm tracking-wide" style={{ color: colors.textDark }}>VALDERRAMA</span>
-        <span className="text-xs tracking-widest -mt-0.5" style={{ color: colors.textMuted }}>HEALTH</span>
-      </div>
+    <div className="flex items-center select-none">
+      <img src={sutterHealthLogo} alt="Sutter Health Logo" className="flex-shrink-0" style={{ height: 36, objectFit: "contain", position: "relative", top: "6px" }} />
     </div>
   );
 }
@@ -181,12 +178,12 @@ function SearchBar() {
   return (
     <div className="relative w-full">
       <label htmlFor="portal-search" className="sr-only">Search appointments, results, messages, and more</label>
-      <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" style={{ color: colors.textMuted }} aria-hidden="true" />
+      <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-[#5F6E6C] peer-focus:text-[#00A9A0] transition-colors" aria-hidden="true" />
       <input
         id="portal-search"
         type="search"
         placeholder="Search appointments, results, messages…"
-        className="w-full rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none transition-all"
+        className="peer w-full rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none transition-all"
         style={{
           ...glass,
           color: colors.textDark,
@@ -194,8 +191,8 @@ function SearchBar() {
         }}
         onFocus={(e) => {
           e.target.style.background = "rgba(255,255,255,0.85)";
-          e.target.style.border     = `1px solid ${colors.primary}`;
-          e.target.style.boxShadow  = `0 0 0 3px ${colors.skyTint}, inset 0 1px 2px rgba(0,0,0,0.04)`;
+          e.target.style.border = `1px solid rgba(0,122,114,0.35)`;
+          e.target.style.boxShadow  = `inset 0 1px 2px rgba(0,0,0,0.04)`;
         }}
         onBlur={(e) => {
           e.target.style.background = glass.background;
@@ -234,22 +231,22 @@ function DesktopNav({ onNavigate }) {
             className="relative flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2"
             style={{
               color: colors.textDark,
-              background: isActive ? item.bg : glass.background,
-              border: isActive ? `1px solid ${item.color}35` : glass.border,
-              boxShadow: isActive ? `0 2px 8px ${item.color}20, ${glass.boxShadow}` : glass.boxShadow,
+              background: isActive ? "#FFFFFF" : glass.background,
+              border: isActive ? "1px solid rgba(0,122,114,0.35)" : glass.border,
+              boxShadow: glass.boxShadow,
               backdropFilter: glass.backdropFilter, WebkitBackdropFilter: glass.WebkitBackdropFilter,
             }}
             onMouseEnter={(e) => { if (!isActive) { e.currentTarget.style.background=glassHover.background; e.currentTarget.style.boxShadow=glassHover.boxShadow; e.currentTarget.style.border=`1px solid rgba(255,255,255,0.95)`; }}}
             onMouseLeave={(e) => { if (!isActive) { e.currentTarget.style.background=glass.background; e.currentTarget.style.boxShadow=glass.boxShadow; e.currentTarget.style.border=glass.border; }}}
           >
             <span className="flex items-center justify-center rounded-xl flex-shrink-0"
-              style={{ width: 40, height: 40, background: item.bg, color: item.color }}>
+              style={{ width: 40, height: 40, background: isActive ? "#00A9A0" : "#FFFFFF", color: isActive ? "#FFFFFF" : "#00A9A0" }}>
               <IconComp size={20} />
             </span>
             <span>{item.label}</span>
             {item.badge && (
               <span className="ml-auto flex items-center justify-center rounded-full text-white font-semibold"
-                style={{ width: 19, height: 19, fontSize: 10, background: colors.error }} aria-label={`${item.badge} unread`}>
+                style={{ width: 19, height: 19, fontSize: 10, background: "#E5302B" }} aria-label={`${item.badge} unread`}>
                 {item.badge}
               </span>
             )}
@@ -299,7 +296,7 @@ function MobileNav({ onNavigate }) {
               {item.badge && (
                 <span
                   className="absolute -top-1 -right-1.5 flex items-center justify-center rounded-full text-white"
-                  style={{ width: 15, height: 15, fontSize: 9, fontWeight: 600, background: colors.error }}
+                  style={{ width: 15, height: 15, fontSize: 9, fontWeight: 600, background: "#E5302B" }}
                   aria-label={`${item.badge} unread`}
                 >
                   {item.badge}
@@ -342,19 +339,17 @@ function PillButton({ href, color, children }) {
         background: "rgba(255,255,255,0.5)",
         border: "1px solid rgba(255,255,255,0.85)",
         boxShadow: "inset 0 1px 2px rgba(0,0,0,0.05), 0 0.5px 0 rgba(255,255,255,0.6)",
-        color: colors.textMuted,
+        color: colors.primary,
         backdropFilter: "blur(8px)",
         WebkitBackdropFilter: "blur(8px)",
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.background = "rgba(255,255,255,0.78)";
-        e.currentTarget.style.color      = color;
         e.currentTarget.style.border     = `1px solid ${color}50`;
         e.currentTarget.style.boxShadow  = `0 2px 8px ${color}15, inset 0 1px 2px rgba(0,0,0,0.03)`;
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.background = "rgba(255,255,255,0.5)";
-        e.currentTarget.style.color      = colors.textMuted;
         e.currentTarget.style.border     = "1px solid rgba(255,255,255,0.85)";
         e.currentTarget.style.boxShadow  = "inset 0 1px 2px rgba(0,0,0,0.05), 0 0.5px 0 rgba(255,255,255,0.6)";
       }}
@@ -386,7 +381,7 @@ function UpdateCard({ item }) {
       {/* Icon */}
       <span
         className="flex-shrink-0 flex items-center justify-center rounded-xl mt-0.5"
-        style={{ width: 44, height: 44, background: item.accentBg, color: item.accent }}
+        style={{ width: 44, height: 44, background: "#FFFFFF", color: "#00A9A0" }}
       >
         <IconComp size={22} />
       </span>
@@ -394,16 +389,16 @@ function UpdateCard({ item }) {
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-medium uppercase tracking-wide" style={{ color: item.accent }}>
+          <span className="text-xs font-medium uppercase tracking-wide" style={{ color: colors.primary }}>
             {item.label}
           </span>
           {item.tag && (
             <span
               className="inline-flex items-center rounded-full px-2 py-0.5 font-semibold"
               style={{
-                background: `${item.accent}15`,
-                border: `1px solid ${item.accent}30`,
-                color: item.accent,
+                background: `${colors.primary}15`,
+                border: `1px solid ${colors.primary}30`,
+                color: colors.primary,
                 fontSize: 11,
               }}
             >
@@ -458,7 +453,7 @@ function QuickActions({ onNavigate }) {
             >
               <span
                 className="flex items-center justify-center rounded-xl"
-                style={{ width: 44, height: 44, background: qa.bg, color: qa.color }}
+                style={{ width: 44, height: 44, background: "#FFFFFF", color: "#00A9A0" }}
               >
                 <IconComp size={22} />
               </span>
@@ -507,7 +502,7 @@ function AIAssistant() {
           aria-label="Open assistant — Ask for help"
           className="fixed z-50 flex items-center gap-2 rounded-full px-5 py-3 text-white font-medium text-sm shadow-lg transition-all duration-200 hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
           style={{
-            background: `linear-gradient(135deg, ${colors.primary}, #5BB8FF)`,
+            background: `linear-gradient(135deg, ${colors.primary}, #00A499)`,
             bottom: "calc(env(safe-area-inset-bottom, 8px) + 80px)",
             right: 24,
           }}
@@ -542,7 +537,7 @@ function AIAssistant() {
             <div className="flex items-center gap-2.5">
               <span
                 className="flex items-center justify-center rounded-xl"
-                style={{ width: 34, height: 34, background: `linear-gradient(135deg, ${colors.primary}, #5BB8FF)` }}
+                style={{ width: 34, height: 34, background: `linear-gradient(135deg, ${colors.primary}, #00A499)` }}
               >
                 <SparkleIcon size={17} className="text-white" />
               </span>
@@ -593,7 +588,7 @@ function AIAssistant() {
                     color: colors.textDark,
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(42,157,255,0.08)";
+                    e.currentTarget.style.background = "rgba(0,122,114,0.08)";
                     e.currentTarget.style.border     = `1px solid ${colors.primary}40`;
                     e.currentTarget.style.color       = colors.primary;
                   }}
@@ -647,7 +642,14 @@ function AIAssistant() {
             <button
               aria-label="Send question"
               className="flex items-center justify-center rounded-xl p-2 transition-colors focus:outline-none focus-visible:ring-2"
-              style={{ background: query ? colors.primary : "rgba(255,255,255,0.45)", color: query ? "#fff" : colors.textMuted }}
+              style={{
+                background: query ? "rgba(0,122,114,0.1)" : "rgba(255,255,255,0.45)",
+                color: query ? colors.primary : colors.textMuted,
+                border: query ? "1px solid rgba(0,122,114,0.3)" : "none",
+                boxShadow: query ? "inset 0 1px 2px rgba(0,122,114,0.06)" : "none",
+              }}
+              onMouseEnter={(e) => { if (query) e.currentTarget.style.background = "rgba(0,122,114,0.18)"; }}
+              onMouseLeave={(e) => { if (query) e.currentTarget.style.background = "rgba(0,122,114,0.1)"; }}
             >
               <Send size={16} />
             </button>
@@ -708,7 +710,7 @@ export default function PatientPortalHome({ onNavigate = () => {} }) {
               <BellIcon size={20} />
               <span
                 className="absolute top-1 right-1 rounded-full"
-                style={{ width: 8, height: 8, background: colors.error, border: "1.5px solid rgba(255,255,255,0.8)" }}
+                style={{ width: 8, height: 8, background: "#E5302B", border: "1.5px solid rgba(255,255,255,0.8)" }}
                 aria-label="New notifications"
               />
             </button>
@@ -753,12 +755,12 @@ export default function PatientPortalHome({ onNavigate = () => {} }) {
                   className="ml-auto text-sm font-medium whitespace-nowrap focus:outline-none focus-visible:ring-2 rounded-lg px-3 py-1.5 transition-all"
                   style={{
                     color: colors.primary,
-                    background: "rgba(42,157,255,0.1)",
-                    border: `1px solid rgba(42,157,255,0.3)`,
-                    boxShadow: "inset 0 1px 2px rgba(42,157,255,0.06)",
+                    background: "rgba(0,122,114,0.1)",
+                    border: `1px solid rgba(0,122,114,0.3)`,
+                    boxShadow: "inset 0 1px 2px rgba(0,122,114,0.06)",
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(42,157,255,0.18)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(42,157,255,0.1)"; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(0,122,114,0.18)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(0,122,114,0.1)"; }}
                 >
                   Start check-in
                 </a>
