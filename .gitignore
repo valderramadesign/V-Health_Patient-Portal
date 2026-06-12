@@ -38,3 +38,9 @@ coverage/
 
 # Testing
 .playwright/
+
+# Local-only working files (not part of the app)
+.venv/
+.claude/
+Do not reference for design/
+research/

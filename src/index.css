@@ -55,3 +55,16 @@ body {
 input[type="search"]::-webkit-search-cancel-button {
   -webkit-appearance: none;
 }
+
+/* ── Focus: remove default outline + Tailwind focus rings everywhere ──
+   The page uses its own focus styling (border/background changes), so the
+   browser's outline and any ring-* utilities are suppressed on all elements. */
+*:focus,
+*:focus-visible {
+  outline: none !important;
+}
+* {
+  --tw-ring-shadow: 0 0 #0000 !important;
+  --tw-ring-offset-shadow: 0 0 #0000 !important;
+  --tw-ring-color: transparent !important;
+}

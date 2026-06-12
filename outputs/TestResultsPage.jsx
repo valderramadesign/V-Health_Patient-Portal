@@ -273,14 +273,14 @@ function PageSearchBar() {
   return (
     <div className="relative w-full">
       <label htmlFor="portal-search-results" className="sr-only">Search</label>
-      <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-[#5F6E6C] peer-focus:text-[#00A9A0] transition-colors"
-        aria-hidden="true" />
       <input id="portal-search-results" type="search" placeholder="Search appointments, results, messages…"
         className="peer w-full rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none transition-all"
         style={{ ...glass, color:colors.textDark, fontFamily:"inherit" }}
         onFocus={(e)=>{ e.target.style.background="rgba(255,255,255,0.85)"; e.target.style.border = `1px solid rgba(0,122,114,0.35)`; e.target.style.boxShadow = `inset 0 1px 2px rgba(0,0,0,0.04)`; }}
         onBlur={(e) =>{ e.target.style.background=glass.background; e.target.style.border=glass.border; e.target.style.boxShadow=glass.boxShadow; }}
       />
+      <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-[#5F6E6C] peer-focus:text-[#00A9A0] transition-colors"
+        aria-hidden="true" />
     </div>
   );
 }
@@ -492,7 +492,7 @@ function ResultCard({ result, isSelected, onClick }) {
       className="group w-full text-left flex items-start gap-4 rounded-2xl p-5 transition-all duration-200 focus:outline-none focus-visible:ring-2"
       style={{
         ...glass,
-        background: isSelected ? "rgba(0,122,114,0.08)" : hovered ? glassHover.background : glass.background,
+        background: isSelected ? "#FFFFFF" : hovered ? glassHover.background : glass.background,
         boxShadow:  isSelected ? glass.boxShadow : hovered ? glassHover.boxShadow : glass.boxShadow,
         border:     isSelected ? "1px solid rgba(0,122,114,0.35)" : glass.border,
       }}
@@ -500,37 +500,42 @@ function ResultCard({ result, isSelected, onClick }) {
       aria-label={`${result.isNew ? "New: " : ""}${result.name} — ${result.status}`}
     >
       {/* Icon */}
-      <span className="flex-shrink-0 flex items-center justify-center rounded-xl mt-0.5"
-        style={{ width: 44, height: 44, background: "#FFFFFF", color: "#00A9A0" }}>
+      <span className="flex-shrink-0 flex items-center justify-center rounded-xl mt-0.5 transition-colors"
+        style={{ width: 44, height: 44, background: isSelected ? "#00A9A0" : "#FFFFFF", color: isSelected ? "#FFFFFF" : "#00A9A0" }}>
         <IconComp size={22} />
       </span>
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        {/* Headline + category badge */}
-        <div className="flex items-center gap-2">
+        {/* Headline + category badge — inline flow so the dot and chip ride
+            with the headline and only wrap at the true margin */}
+        <div className="leading-snug">
           {result.isNew && (
-            <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" role="img" aria-label="New result"
+            <span className="inline-block w-1.5 h-1.5 rounded-full align-middle mr-2" role="img" aria-label="New result"
               style={{ background: colors.primary }} />
           )}
-          <h3 className="font-normal uppercase tracking-wide leading-snug flex-1 min-w-0" style={{ color: colors.primary, fontSize: 13 }}>
+          <h3 className="inline font-normal uppercase tracking-wide" style={{ color: colors.primary, fontSize: 13 }}>
             {result.name}
-          </h3>
-          <CategoryChip category={result.category} />
+          </h3>{" "}
+          <span className="inline-flex align-middle ml-0.5">
+            <CategoryChip category={result.category} />
+          </span>
         </div>
 
-        {/* Description + status badge */}
-        <div className="flex items-start justify-between gap-2 mt-1">
-          <p className="text-sm leading-snug min-w-0" style={{ color: colors.textDark }}>
-            {result.shortPreview}
-          </p>
-          <StatusBadge status={result.status} />
-        </div>
+        {/* Description */}
+        <p className="text-sm leading-snug mt-1" style={{ color: colors.textDark }}>
+          {result.shortPreview}
+        </p>
 
         {/* Clinician + date */}
         <p className="text-xs mt-2" style={{ color: colors.textMuted }}>
           {result.clinician} · {result.collectionDate}
         </p>
+      </div>
+
+      {/* Status badge — upper right */}
+      <div className="flex-shrink-0 mt-0.5">
+        <StatusBadge status={result.status} />
       </div>
     </button>
   );
@@ -586,8 +591,6 @@ function ResultsListPanel({
       <div className="px-4 pb-3 flex-shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.5)" }}>
         {/* Search */}
         <div className="relative mb-3">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-            style={{ color: colors.textMuted }} />
           <label htmlFor="results-search" className="sr-only">Search results</label>
           <input
             id="results-search"
@@ -595,11 +598,12 @@ function ResultsListPanel({
             placeholder="Search by name, category, or clinician…"
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full rounded-xl py-2 pl-9 pr-8 text-xs outline-none transition-all"
+            className="peer w-full rounded-xl py-2 pl-9 pr-8 text-xs outline-none transition-all"
             style={{ ...glass, color: colors.textDark, fontFamily: "inherit" }}
             onFocus={(e)=>{ e.target.style.background="rgba(255,255,255,0.85)"; e.target.style.border = `1px solid rgba(0,122,114,0.35)`; }}
             onBlur={(e) =>{ e.target.style.background=glass.background; e.target.style.border=glass.border; }}
           />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-[#5F6E6C] peer-focus:text-[#00A9A0] transition-colors" />
           {search && (
             <button onClick={() => onSearchChange("")} aria-label="Clear search"
               className="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none"
@@ -732,9 +736,11 @@ function ComponentRow({ comp, isLast }) {
           <p className="text-xs" style={{ color: colors.textMuted }}>{comp.unit}</p>
         </div>
         <span className="flex items-center gap-0.5 text-xs font-semibold rounded-full px-2.5 py-1"
-          style={{ background: cfg.bg, color: cfg.color, border: isAbnormal ? `1px solid ${cfg.color}30` : "none" }}
+          style={isAbnormal
+            ? { background: cfg.bg, color: cfg.color, border: `1px solid ${cfg.color}30` }
+            : { background: `${colors.primary}15`, color: colors.primary, border: `1px solid ${colors.primary}30` }}
           aria-label={`${comp.name}: ${cfg.label}`}>
-          {cfg.symbol} {cfg.label}
+          {isAbnormal && `${cfg.symbol} `}{cfg.label}
         </span>
       </div>
     </div>
@@ -817,23 +823,28 @@ function ResultDetailPanel({ result, onBack, onNavigate }) {
           <ChevronLeft size={14} /> Back to results
         </button>
 
-        <div className="flex items-start gap-3">
-          {/* Category icon */}
-          <div className="flex-shrink-0 flex items-center justify-center rounded-xl mt-0.5"
-            style={{ width:40, height:40,
-              background: result.status === "outside-range" ? "rgba(200,85,0,0.1)" : "rgba(0,122,114,0.08)",
-              color: result.status === "outside-range" ? "#C85500" : colors.primary }}>
+        <div className="flex items-center gap-3">
+          {/* Category icon — reversed fill, matching the selected tile */}
+          <div className="flex-shrink-0 flex items-center justify-center rounded-xl"
+            style={{ width:40, height:40, background: "#00A9A0", color: "#FFFFFF" }}>
             {isImaging ? <ImageIcon size={20} /> : <FlaskIcon size={20} />}
           </div>
 
           <div className="flex-1 min-w-0">
-            <h2 className="font-semibold text-base leading-snug" style={{ color: colors.textDark }}>
-              {result.name}
-            </h2>
-            <div className="flex items-center gap-2 mt-1 flex-wrap">
-              <StatusBadge status={result.status} />
-              <CategoryChip category={result.category} />
+            {/* Headline + category chip — inline, matching the tile */}
+            <div className="leading-snug">
+              <h2 className="inline font-normal uppercase tracking-wide" style={{ color: colors.primary, fontSize: 15 }}>
+                {result.name}
+              </h2>{" "}
+              <span className="inline-flex align-middle ml-0.5">
+                <CategoryChip category={result.category} />
+              </span>
             </div>
+          </div>
+
+          {/* Status badge — right */}
+          <div className="flex-shrink-0">
+            <StatusBadge status={result.status} />
           </div>
         </div>
 

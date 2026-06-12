@@ -143,9 +143,9 @@ const formats = [
 ];
 
 const locations = [
-  { id: "main", name: "Valderrama Health — Main Campus", address: "1234 Wellness Ave, San Francisco, CA 94105", distance: "0.8 mi", parking: "Free parking available" },
-  { id: "westside", name: "Valderrama Health — Westside Clinic", address: "567 Pacific Blvd, San Francisco, CA 94117", distance: "2.1 mi", parking: "Street parking nearby" },
-  { id: "mission", name: "Valderrama Health — Mission District", address: "890 Mission St, San Francisco, CA 94103", distance: "1.4 mi", parking: "Paid garage adjacent" },
+  { id: "main", name: "Sutter Health — Main Campus", address: "1234 Wellness Ave, San Francisco, CA 94105", distance: "0.8 mi", parking: "Free parking available" },
+  { id: "westside", name: "Sutter Health — Westside Clinic", address: "567 Pacific Blvd, San Francisco, CA 94117", distance: "2.1 mi", parking: "Street parking nearby" },
+  { id: "mission", name: "Sutter Health — Mission District", address: "890 Mission St, San Francisco, CA 94103", distance: "1.4 mi", parking: "Paid garage adjacent" },
 ];
 
 // Generate the next 10 weekdays from April 10, 2026
@@ -191,14 +191,14 @@ function SearchBar() {
   return (
     <div className="relative w-full">
       <label htmlFor="portal-search" className="sr-only">Search</label>
-      <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-[#5F6E6C] peer-focus:text-[#00A9A0] transition-colors"
-        aria-hidden="true" />
       <input id="portal-search" type="search" placeholder="Search appointments, results, messages…"
         className="peer w-full rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none transition-all"
         style={{ ...glass, color: colors.textDark, fontFamily: "inherit" }}
         onFocus={(e) => { e.target.style.background = "rgba(255,255,255,0.85)"; e.target.style.border = `1px solid rgba(0,122,114,0.35)`; e.target.style.boxShadow = `inset 0 1px 2px rgba(0,0,0,0.04)`; }}
         onBlur={(e) => { e.target.style.background = glass.background; e.target.style.border = glass.border; e.target.style.boxShadow = glass.boxShadow; }}
       />
+      <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-[#5F6E6C] peer-focus:text-[#00A9A0] transition-colors"
+        aria-hidden="true" />
     </div>
   );
 }

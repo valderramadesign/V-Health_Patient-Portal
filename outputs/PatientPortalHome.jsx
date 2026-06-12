@@ -178,7 +178,6 @@ function SearchBar() {
   return (
     <div className="relative w-full">
       <label htmlFor="portal-search" className="sr-only">Search appointments, results, messages, and more</label>
-      <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-[#5F6E6C] peer-focus:text-[#00A9A0] transition-colors" aria-hidden="true" />
       <input
         id="portal-search"
         type="search"
@@ -200,6 +199,7 @@ function SearchBar() {
           e.target.style.boxShadow  = glass.boxShadow;
         }}
       />
+      <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-[#5F6E6C] peer-focus:text-[#00A9A0] transition-colors" aria-hidden="true" />
     </div>
   );
 }

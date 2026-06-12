@@ -207,13 +207,13 @@ function HeaderSearchBar() {
   return (
     <div className="relative w-full">
       <label htmlFor="portal-search-refill" className="sr-only">Search</label>
-      <SearchIcon size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-[#5F6E6C] peer-focus:text-[#00A9A0] transition-colors" />
       <input id="portal-search-refill" type="search" placeholder="Search appointments, results, messages…"
         className="peer w-full rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none transition-all"
         style={{ ...glass, color: colors.textDark, fontFamily: "inherit" }}
         onFocus={(e) => { e.target.style.background="rgba(255,255,255,0.85)"; e.target.style.border = `1px solid rgba(0,122,114,0.35)`; e.target.style.boxShadow = `inset 0 1px 2px rgba(0,0,0,0.04)`; }}
         onBlur={(e)  => { e.target.style.background=glass.background; e.target.style.border=glass.border; e.target.style.boxShadow=glass.boxShadow; }}
       />
+      <SearchIcon size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-[#5F6E6C] peer-focus:text-[#00A9A0] transition-colors" />
     </div>
   );
 }
@@ -441,15 +441,14 @@ function SearchFilterBar({ search, onSearch, filter, onFilter, sort, onSort }) {
     <div className="flex flex-col gap-3 mb-4">
       <div className="relative">
         <label htmlFor="med-search" className="sr-only">Search medications</label>
-        <SearchIcon size={15} className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-          style={{ color:colors.textMuted }} />
         <input id="med-search" type="search" value={search} onChange={(e) => onSearch(e.target.value)}
           placeholder="Search by medication, clinician, or pharmacy…"
-          className="w-full rounded-xl py-2.5 pl-9 pr-8 text-sm outline-none transition-all"
+          className="peer w-full rounded-xl py-2.5 pl-9 pr-8 text-sm outline-none transition-all"
           style={{ ...glass, color:colors.textDark, fontFamily:"inherit" }}
           onFocus={(e) => { e.target.style.background="rgba(255,255,255,0.85)"; e.target.style.border = `1px solid rgba(0,122,114,0.35)`; }}
           onBlur={(e)  => { e.target.style.background=glass.background; e.target.style.border=glass.border; e.target.style.boxShadow=glass.boxShadow; }}
         />
+        <SearchIcon size={15} className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-[#5F6E6C] peer-focus:text-[#00A9A0] transition-colors" />
         {search && (
           <button onClick={() => onSearch("")} aria-label="Clear search"
             className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded p-0.5 focus:outline-none focus-visible:ring-2"
@@ -523,20 +522,22 @@ function MedicationCard({ med, isSelected, onClick }) {
       </span>
       <div className="flex-1 min-w-0">
         {/* Headline + strength badge */}
-        <div className="flex items-center gap-2">
-          <h3 className="font-normal uppercase tracking-wide leading-snug flex-1 min-w-0" style={{ color: colors.primary, fontSize: 13 }}>{med.name}</h3>
+        <div className="flex items-center gap-2 flex-wrap">
+          <h3 className="font-normal uppercase tracking-wide leading-snug" style={{ color: colors.primary, fontSize: 13 }}>{med.name}</h3>
           <PillBadge tone="grey">{med.strength}</PillBadge>
         </div>
-        {/* Instructions + status badge */}
-        <div className="flex items-start justify-between gap-2 mt-1">
-          <p className="text-sm leading-snug min-w-0" style={{ color: colors.textDark }}>{med.instructions}</p>
-          <StatusBadge status={med.status} />
-        </div>
+        {/* Instructions */}
+        <p className="text-sm leading-snug mt-1" style={{ color: colors.textDark }}>{med.instructions}</p>
         {/* Clinician + pharmacy */}
         <p className="text-xs mt-2" style={{ color: colors.textMuted }}>
           {med.clinician}{pharmacy ? ` · ${pharmacy.name}` : ""}
           {med.dueDate && med.status === "eligible" ? ` · Due ${med.dueDate}` : ""}
         </p>
+      </div>
+
+      {/* Status badge — upper right */}
+      <div className="flex-shrink-0 mt-0.5">
+        <StatusBadge status={med.status} />
       </div>
     </button>
   );

@@ -101,6 +101,8 @@ const SparkleIcon   = (p) => <Icon {...p}><path d="M12 2l2.4 7.2L22 12l-7.6 2.8L
 const BellIcon      = (p) => <Icon {...p}><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></Icon>;
 const PenIcon       = (p) => <Icon {...p}><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 13.5-13.5z"/></Icon>;
 const InboxIcon     = (p) => <Icon {...p}><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></Icon>;
+const CheckIcon     = (p) => <Icon {...p}><polyline points="20 6 9 17 4 12"/></Icon>;
+const ClockIcon     = (p) => <Icon {...p}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></Icon>;
 
 /* ─────────────────────────────────────────────
    MOCK DATA
@@ -257,14 +259,14 @@ function SearchBar() {
   return (
     <div className="relative w-full">
       <label htmlFor="portal-search-msg" className="sr-only">Search</label>
-      <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-[#5F6E6C] peer-focus:text-[#00A9A0] transition-colors"
-        aria-hidden="true" />
       <input id="portal-search-msg" type="search" placeholder="Search appointments, results, messages…"
         className="peer w-full rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none transition-all"
         style={{ ...glass, color: colors.textDark, fontFamily: "inherit" }}
         onFocus={(e) => { e.target.style.background="rgba(255,255,255,0.85)"; e.target.style.border = `1px solid rgba(0,122,114,0.35)`; e.target.style.boxShadow = `inset 0 1px 2px rgba(0,0,0,0.04)`; }}
         onBlur={(e)  => { e.target.style.background=glass.background; e.target.style.border=glass.border; e.target.style.boxShadow=glass.boxShadow; }}
       />
+      <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none z-10 text-[#5F6E6C] peer-focus:text-[#00A9A0] transition-colors"
+        aria-hidden="true" />
     </div>
   );
 }
@@ -439,63 +441,46 @@ function AIAssistant() {
    ───────────────────────────────────────────── */
 
 function ConversationItem({ conv, isSelected, onClick }) {
-  const [hovered, setHovered] = useState(false);
   return (
     <button
       onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="w-full text-left px-4 py-3.5 transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset"
-      style={{
-        background: isSelected
-          ? "rgba(0,122,114,0.08)"
-          : hovered ? "rgba(255,255,255,0.45)" : "transparent",
-        borderBottom: "1px solid rgba(255,255,255,0.4)",
-        borderLeft: isSelected ? `3px solid ${colors.primary}` : "3px solid transparent",
-      }}
+      className="w-full text-left rounded-2xl p-4 transition-all duration-150 focus:outline-none focus-visible:ring-2"
+      style={isSelected
+        ? { background: "#FFFFFF", border: "1px solid rgba(0,122,114,0.35)", boxShadow: glass.boxShadow }
+        : glass}
+      onMouseEnter={(e) => { if (!isSelected) { e.currentTarget.style.background = glassHover.background; e.currentTarget.style.boxShadow = glassHover.boxShadow; } }}
+      onMouseLeave={(e) => { if (!isSelected) { e.currentTarget.style.background = glass.background; e.currentTarget.style.boxShadow = glass.boxShadow; e.currentTarget.style.border = glass.border; } }}
       aria-current={isSelected ? "true" : undefined}
       aria-label={`${conv.unread ? "Unread: " : ""}${conv.sender} — ${conv.subject}`}
     >
-      <div className="flex items-start gap-3">
+      <div className="flex items-center gap-3.5">
         {/* Avatar */}
-        <div className="flex-shrink-0 flex items-center justify-center rounded-full font-semibold text-white text-xs"
-          style={{ width: 38, height: 38, background: conv.avatarColor || colors.primary, marginTop: 1 }}>
+        <span className="flex items-center justify-center rounded-full flex-shrink-0 font-semibold text-white text-sm"
+          style={{ width: 42, height: 42, background: "#00A9A0" }}>
           {conv.avatarInitials}
-        </div>
+        </span>
 
         {/* Content */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between gap-2 mb-0.5">
-            <span className="text-sm truncate"
-              style={{ color: isSelected ? colors.primary : colors.textDark,
-                fontWeight: conv.unread ? 700 : 500 }}>
-              {conv.sender}
-            </span>
-            <span className="text-xs flex-shrink-0" style={{ color: colors.textMuted }}>
-              {conv.timestamp}
-            </span>
-          </div>
-          <p className="text-xs truncate mb-1"
-            style={{ color: conv.unread ? colors.textDark : colors.textMuted,
-              fontWeight: conv.unread ? 600 : 400 }}>
-            {conv.subject}
-          </p>
           <div className="flex items-center gap-2">
-            <p className="text-xs truncate flex-1 leading-snug" style={{ color: colors.textMuted }}>
-              {conv.preview}
-            </p>
             {conv.unread && (
-              <span className="flex-shrink-0 w-2 h-2 rounded-full" role="img"
+              <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full" role="img"
                 style={{ background: colors.primary }} aria-label="Unread message" />
             )}
-            {conv.replied && !conv.unread && (
-              <span className="flex-shrink-0 text-xs rounded-full px-2 py-0.5 font-medium"
-                style={{ background: colors.successBg, color: colors.success, whiteSpace: "nowrap" }}>
-                Replied
-              </span>
-            )}
+            <p className="font-normal text-sm leading-tight uppercase tracking-wide truncate" style={{ color: colors.primary }}>
+              {conv.sender}
+            </p>
+          </div>
+          <p className="text-xs mt-0.5 truncate" style={{ color: colors.textDark }}>{conv.subject}</p>
+          <div className="flex items-center gap-3 mt-1.5">
+            <span className="text-xs truncate flex-1" style={{ color: colors.textMuted }}>{conv.preview}</span>
+            <span className="flex items-center gap-1 text-xs flex-shrink-0" style={{ color: colors.textMuted }}>
+              <ClockIcon size={11} /> {conv.timestamp}
+            </span>
           </div>
         </div>
+
+        {isSelected && <CheckIcon size={16} className="flex-shrink-0" style={{ color: "#00A9A0" }} />}
       </div>
     </button>
   );
@@ -548,8 +533,6 @@ function ConversationListPanel({
 
         {/* Search */}
         <div className="relative mb-3">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
-            style={{ color: colors.textMuted }} />
           <label htmlFor="msg-search" className="sr-only">Search messages</label>
           <input
             id="msg-search"
@@ -557,11 +540,12 @@ function ConversationListPanel({
             placeholder="Search messages…"
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full rounded-xl py-2 pl-9 pr-3 text-xs outline-none transition-all"
+            className="peer w-full rounded-xl py-2 pl-9 pr-3 text-xs outline-none transition-all"
             style={{ ...glass, color: colors.textDark, fontFamily: "inherit" }}
             onFocus={(e)=>{ e.target.style.background="rgba(255,255,255,0.85)"; e.target.style.border = `1px solid rgba(0,122,114,0.35)`; }}
             onBlur={(e) =>{ e.target.style.background=glass.background; e.target.style.border=glass.border; }}
           />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none z-10 transition-colors text-[#5F6E6C] peer-focus:text-[#00A9A0]" />
           {search && (
             <button onClick={() => onSearchChange("")} aria-label="Clear search"
               className="absolute right-3 top-1/2 -translate-y-1/2 focus:outline-none"
@@ -605,15 +589,17 @@ function ConversationListPanel({
             </p>
           </div>
         ) : (
-          conversations.map((conv) => (
-            <div key={conv.id} role="listitem">
-              <ConversationItem
-                conv={conv}
-                isSelected={conv.id === selectedId}
-                onClick={() => onSelect(conv.id)}
-              />
-            </div>
-          ))
+          <div className="flex flex-col gap-2.5 px-3 py-3">
+            {conversations.map((conv) => (
+              <div key={conv.id} role="listitem">
+                <ConversationItem
+                  conv={conv}
+                  isSelected={conv.id === selectedId}
+                  onClick={() => onSelect(conv.id)}
+                />
+              </div>
+            ))}
+          </div>
         )}
       </div>
 
@@ -638,7 +624,7 @@ function MessageBubble({ msg }) {
       {/* Care team avatar */}
       {!msg.isPatient && (
         <div className="flex-shrink-0 flex items-center justify-center rounded-full font-semibold text-white text-xs mr-2.5 self-end mb-1"
-          style={{ width: 32, height: 32, background: colors.primary }}>
+          style={{ width: 32, height: 32, background: "#00A9A0" }}>
           {msg.sender.split(" ").map((w) => w[0]).slice(0, 2).join("")}
         </div>
       )}
@@ -675,7 +661,7 @@ function MessageBubble({ msg }) {
       {/* Patient avatar */}
       {msg.isPatient && (
         <div className="flex-shrink-0 flex items-center justify-center rounded-full font-semibold text-white text-xs ml-2.5 self-end mb-1"
-          style={{ width: 32, height: 32, background: colors.success }}>
+          style={{ width: 32, height: 32, background: "#00A9A0" }}>
           Me
         </div>
       )}
@@ -729,9 +715,8 @@ function MessageThreadPanel({ conversation, onReply, onBack }) {
       <div className="flex flex-col items-center justify-center h-full py-16 px-6 text-center"
         role="region" aria-label="Message thread">
         <div className="flex items-center justify-center rounded-2xl mb-4"
-          style={{ width: 56, height: 56, background: "rgba(0,122,114,0.08)",
-            border: "1px solid rgba(0,122,114,0.15)" }}>
-          <MessageIcon size={26} style={{ color: colors.primary }} />
+          style={{ width: 56, height: 56, background: "#FFFFFF", boxShadow: glass.boxShadow }}>
+          <MessageIcon size={26} style={{ color: "#00A9A0" }} />
         </div>
         <p className="font-semibold text-sm mb-1" style={{ color: colors.textDark }}>
           Select a message to read
@@ -760,7 +745,7 @@ function MessageThreadPanel({ conversation, onReply, onBack }) {
 
         {/* Avatar */}
         <div className="hidden lg:flex flex-shrink-0 items-center justify-center rounded-full font-semibold text-white text-xs"
-          style={{ width: 38, height: 38, background: conversation.avatarColor || colors.primary }}>
+          style={{ width: 38, height: 38, background: "#00A9A0" }}>
           {conversation.avatarInitials}
         </div>
 
